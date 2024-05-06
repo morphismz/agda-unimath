@@ -185,3 +185,12 @@ module _
 ```
 
 The above coherences simplify when α and β are 2-loops.
+
+TODO
+
+```agda
+
+t : {!!}
+t = {!!}
+
+```
