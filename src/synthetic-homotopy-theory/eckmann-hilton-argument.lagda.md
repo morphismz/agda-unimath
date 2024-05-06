@@ -8,12 +8,21 @@ module synthetic-homotopy-theory.eckmann-hilton-argument where
 
 ```agda
 open import foundation.action-on-identifications-functions
+open import foundation.commuting-squares-of-homotopies
 open import foundation.dependent-pair-types
+open import foundation.function-types
+open import foundation.homotopies
+open import foundation.homotopy-algebra
 open import foundation.identity-types
 open import foundation.interchange-law
 open import foundation.path-algebra
+open import foundation.transport-along-higher-identifications
+open import foundation.transport-along-identifications
 open import foundation.universe-levels
+open import foundation.whiskering-homotopies-composition
+open import foundation.whiskering-homotopies-concatenation
 open import foundation.whiskering-identifications-concatenation
+open import foundation.whiskering-operations
 
 open import structured-types.pointed-equivalences
 open import structured-types.pointed-types
@@ -348,6 +357,116 @@ module _
           ( pointed-equiv-loop-pointed-identity (Ω (A , a)) (s ∙ s))))
       ( compute-inv-inv-eckmann-hilton-Ω² s s))
 ```
+
+### Transport preserves the Eckmann-Hilton identification
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {a : A}
+  {B : A → UU l2} (α β : type-Ω² a)
+  where
+
+  tr³-eckmann-hilton-distributed :
+    tr² B (α ∙ β) ~ tr² B (β ∙ α)
+  tr³-eckmann-hilton-distributed =
+    ( tr³
+      ( B)
+      ( inv
+        ( horizontal-concat-Id²
+          ( left-unit-law-left-whisker-Ω² α)
+          ( right-unit-law-right-whisker-Ω² β)))) ∙h
+    ( tr³
+      ( B)
+      ( commutative-left-whisker-right-whisker-concat α β)) ∙h
+    ( tr³
+      ( B)
+      ( horizontal-concat-Id²
+        ( right-unit-law-right-whisker-Ω² β)
+        ( left-unit-law-left-whisker-Ω² α)))
+    
+  tr³-concat-eckmann-hilton :
+    ( tr³ B (eckmann-hilton-Ω² α β)) ~
+    ( tr³-eckmann-hilton-distributed)
+  tr³-concat-eckmann-hilton =
+    ( tr³-concat
+        ( ( inv
+          ( horizontal-concat-Id²
+            ( left-unit-law-left-whisker-Ω² α)
+            ( right-unit-law-right-whisker-Ω² β))) ∙
+        ( commutative-left-whisker-right-whisker-concat α β))
+        ( horizontal-concat-Id²
+          ( right-unit-law-right-whisker-Ω² β)
+          ( left-unit-law-left-whisker-Ω² α))) ∙h
+    ( right-whisker-concat-htpy
+      ( tr³-concat
+        ( inv
+          ( horizontal-concat-Id²
+            ( left-unit-law-left-whisker-Ω² α)
+            ( right-unit-law-right-whisker-Ω² β)))
+        ( commutative-left-whisker-right-whisker-concat α β))
+      ( tr³
+        ( B)
+        ( horizontal-concat-Id²
+          ( right-unit-law-right-whisker-Ω² β)
+          ( left-unit-law-left-whisker-Ω² α))))
+
+  tr³-eckmann-hilton :
+    coherence-square-homotopies
+      ( tr²-concat α β)
+      ( tr³ B (eckmann-hilton-Ω² α β))
+      ( eckmann-hilton-htpy (tr² B α) (tr² B β))
+      ( tr²-concat β α)
+  tr³-eckmann-hilton =
+    inv-concat-left-homotopy-coherence-square-homotopies
+      ( tr²-concat α β)
+      ( tr³ B (eckmann-hilton-Ω² α β))
+      ( eckmann-hilton-htpy (tr² B α) (tr² B β))
+      ( tr²-concat β α)
+      ( tr³-concat-eckmann-hilton)
+      ( vertical-pasting-coherence-square-homotopies
+        ( tr²-concat α β)
+        ( ( tr³
+          ( B)
+          ( inv
+            ( horizontal-concat-Id²
+              ( left-unit-law-left-whisker-Ω² α)
+              ( right-unit-law-right-whisker-Ω² β)))) ∙h
+        ( tr³
+          ( B)
+          ( commutative-left-whisker-right-whisker-concat α β)))
+        ( ( inv-htpy
+          ( left-whisker-concat-htpy (tr² B α) (left-unit-law-left-whisker-comp (tr² B β)))) ∙h
+        ( commutative-right-whisker-left-whisker-htpy (tr² B α) (tr² B β)))
+        ( {!!})
+        ( tr³
+          ( B)
+          ( horizontal-concat-Id²
+            ( right-unit-law-right-whisker-Ω² β)
+            ( left-unit-law-left-whisker-Ω² α)))
+        ( right-whisker-concat-htpy (left-unit-law-left-whisker-comp (tr² B β)) (tr² B α))
+        ( tr²-concat β α)
+        ( {!!})
+        ( {!!}))
+```
+      
+      ( {!assoc!})      
+
+
+    {!vertical-pasting-coherence-square-homotopies
+      ( tr²-concat α β)
+      ( tr³
+        ( B)
+        ( inv
+          ( horizontal-concat-Id²
+            ( left-unit-law-left-whisker-Ω² α)
+            ( right-unit-law-right-whisker-Ω² β))))
+      ( ?)
+      ( ?)
+      ( ?)
+      ( ?)
+      ( ?)
+      ( ?)
+      ( ?)!}
 
 ## External links
 

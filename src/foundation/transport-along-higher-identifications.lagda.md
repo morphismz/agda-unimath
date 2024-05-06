@@ -8,11 +8,13 @@ module foundation.transport-along-higher-identifications where
 
 ```agda
 open import foundation.action-on-identifications-functions
+open import foundation.commuting-squares-of-homotopies
 open import foundation.commuting-squares-of-identifications
 open import foundation.homotopies
 open import foundation.homotopy-algebra
 open import foundation.universe-levels
 open import foundation.whiskering-homotopies-composition
+open import foundation.whiskering-homotopies-concatenation
 open import foundation.whiskering-identifications-concatenation
 
 open import foundation-core.identity-types
@@ -95,55 +97,91 @@ module _
   tr²-right-whisker refl refl b = inv right-unit
 ```
 
-#### Coherences and algebraic identities for `tr³`
+### Coherences and algebraic identities for `tr³`
 
 ```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {x y : A} {p p' : x ＝ y}
+  {B : A → UU l2}
+  where
+
+  tr³-concat :
+    {α α' α'' : p ＝ p'} (γ : α ＝ α') (δ : α' ＝ α'') →
+    tr³ B (γ ∙ δ) ~ (tr³ B γ) ∙h (tr³ B δ)
+  tr³-concat γ δ b = ap-concat (λ t → tr² B t b) γ δ
+
+```
+
+#### Coherences related to commuting two dimensional identifications
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {x y z : A}
+  {B : A → UU l2} {p p' : x ＝ y} {q q' : y ＝ z}
+  where
+
+  tr²-concat-left-whisker-right-whisker-concat :
+    (β : q ＝ q') (α : p ＝ p') →
+    ((tr² B ((left-whisker-concat p β) ∙ (right-whisker-concat α q'))) ∙h (tr-concat p' q')) ~
+    ((tr-concat p q) ∙h (((tr² B β) ·r (tr B p)) ∙h ((tr B q') ·l (tr² B α))))
+  tr²-concat-left-whisker-right-whisker-concat β α =
+    ( right-whisker-concat-htpy
+      ( tr²-concat
+        ( left-whisker-concat p β)
+        ( right-whisker-concat α q'))
+      ( tr-concat p' q')) ∙h
+    ( vertical-pasting-coherence-square-homotopies
+      ( tr-concat p q)
+      ( tr² B (left-whisker-concat p β))
+      ( right-whisker-comp (tr² B β) (tr B p))
+      ( tr-concat p q')
+      ( tr² B (right-whisker-concat α q'))
+      ( left-whisker-comp (tr B q') (tr² B α))
+      ( tr-concat p' q')
+      ( tr²-left-whisker p β)
+      ( tr²-right-whisker α q'))
+
+  tr²-concat-right-whisker-left-whisker-concat :
+    (α : p ＝ p') (β : q ＝ q') →
+    ((tr² B ((right-whisker-concat α q) ∙ (left-whisker-concat p' β))) ∙h (tr-concat p' q')) ~
+    ((tr-concat p q) ∙h (((tr B q) ·l (tr² B α)) ∙h ((tr² B β) ·r (tr B p'))))
+  tr²-concat-right-whisker-left-whisker-concat α β =
+    ( right-whisker-concat-htpy
+      ( tr²-concat
+        ( right-whisker-concat α q)
+        ( left-whisker-concat p' β))
+      ( tr-concat p' q')) ∙h
+    ( vertical-pasting-coherence-square-homotopies
+      ( tr-concat p q)
+      ( tr² B (right-whisker-concat α q))
+      ( left-whisker-comp (tr B q) (tr² B α))
+      ( tr-concat p' q)
+      ( tr² B (left-whisker-concat p' β))
+      ( right-whisker-comp (tr² B β) (tr B p'))
+      ( tr-concat p' q')
+      ( tr²-right-whisker α q)
+      ( tr²-left-whisker p' β))
+
 module _
   {l1 l2 : Level} {A : UU l1} {x y z : A}
   {B : A → UU l2}
   where
 
   tr³-commutative-htpy-commutative-concat :
-    {q q' : y ＝ z} (β : q ＝ q') {p p' : x ＝ y} (α : p ＝ p') (b : B x) →
-    coherence-square-identifications
-      ( ( right-whisker-concat
-          ( tr²-concat (left-whisker-concat p β)
-          ( right-whisker-concat α q') b)
-          ( tr-concat p' q' b)) ∙
-        ( vertical-pasting-coherence-square-identifications
-          ( tr-concat p q b)
-          ( tr² B (left-whisker-concat p β) b)
-          ( right-whisker-comp (tr² B β) (tr B p) b)
-          ( tr-concat p q' b)
-          ( tr² B (right-whisker-concat α q') b)
-          ( left-whisker-comp (tr B q') (tr² B α) b)
-          ( tr-concat p' q' b)
-          ( tr²-left-whisker p β b)
-          ( tr²-right-whisker α q' b)))
-      ( right-whisker-concat
+    {q q' : y ＝ z} (β : q ＝ q') {p p' : x ＝ y} (α : p ＝ p') →
+    coherence-square-homotopies
+      ( tr²-concat-left-whisker-right-whisker-concat β α)
+      ( right-whisker-concat-htpy
         ( tr³
           ( B)
-          ( commutative-left-whisker-right-whisker-concat β α)
-          ( b))
-        ( tr-concat p' q' b))
-      ( left-whisker-concat
-        ( tr-concat p q b)
-        ( commutative-right-whisker-left-whisker-htpy (tr² B β) (tr² B α) b))
-      ( ( right-whisker-concat
-          ( tr²-concat
-            ( right-whisker-concat α q)
-            ( left-whisker-concat p' β) b)
-          ( tr-concat p' q' b)) ∙
-        ( vertical-pasting-coherence-square-identifications
-          ( tr-concat p q b)
-          ( tr² B (right-whisker-concat α q) b)
-          ( left-whisker-comp (tr B q) (tr² B α) b)
-          ( tr-concat p' q b)
-          ( tr² B (left-whisker-concat p' β) b)
-          ( right-whisker-comp (tr² B β) (tr B p') b)
-          ( tr-concat p' q' b)
-          ( tr²-right-whisker α q b)
-          ( tr²-left-whisker p' β b)))
-  tr³-commutative-htpy-commutative-concat {q = refl} refl {p = refl} refl b =
-    refl
+          ( commutative-left-whisker-right-whisker-concat β α))
+        ( tr-concat p' q'))
+      ( left-whisker-concat-htpy
+        ( tr-concat p q)
+        ( commutative-right-whisker-left-whisker-htpy (tr² B β) (tr² B α)))
+      ( tr²-concat-right-whisker-left-whisker-concat α β)
+  tr³-commutative-htpy-commutative-concat {q = refl} refl {p = refl} refl =
+    refl-htpy
 ```
+
+The above coherences simplify when α and β are 2-loops.

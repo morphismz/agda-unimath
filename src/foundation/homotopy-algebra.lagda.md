@@ -14,7 +14,7 @@ open import foundation.whiskering-homotopies-composition
 open import foundation-core.function-types
 open import foundation-core.homotopies
 open import foundation-core.identity-types
-open import foundation-core.whiskering-identifications-concatenation
+open import foundation-core.whiskering-homotopies-concatenation
 ```
 
 </details>
@@ -109,8 +109,10 @@ commutative-right-whisker-left-whisker-htpy H' H x =
 eckmann-hilton-htpy :
   {l : Level} {X : UU l} (H K : id {A = X} ~ id) →
   (H ∙h K) ~ (K ∙h H)
-eckmann-hilton-htpy H K x =
-  ( inv (left-whisker-concat (H x) (ap-id (K x))) ∙
-  ( commutative-right-whisker-left-whisker-htpy H K x)) ∙
-  ( right-whisker-concat (ap-id (K x)) (H x))
+eckmann-hilton-htpy H K =
+  ( inv-htpy
+    ( left-whisker-concat-htpy H (left-unit-law-left-whisker-comp K))) ∙h
+  ( commutative-right-whisker-left-whisker-htpy H K) ∙h
+  ( right-whisker-concat-htpy (left-unit-law-left-whisker-comp K) H)
+
 ```
