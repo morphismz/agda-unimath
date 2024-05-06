@@ -12,12 +12,12 @@ open import foundation.commuting-squares-of-homotopies
 open import foundation.commuting-squares-of-identifications
 open import foundation.homotopies
 open import foundation.homotopy-algebra
+open import foundation.identity-types
 open import foundation.universe-levels
 open import foundation.whiskering-homotopies-composition
 open import foundation.whiskering-homotopies-concatenation
 open import foundation.whiskering-identifications-concatenation
 
-open import foundation-core.identity-types
 open import foundation-core.transport-along-identifications
 ```
 
@@ -122,8 +122,11 @@ module _
 
   tr²-concat-left-whisker-right-whisker-concat :
     (β : q ＝ q') (α : p ＝ p') →
-    ((tr² B ((left-whisker-concat p β) ∙ (right-whisker-concat α q'))) ∙h (tr-concat p' q')) ~
-    ((tr-concat p q) ∙h (((tr² B β) ·r (tr B p)) ∙h ((tr B q') ·l (tr² B α))))
+    coherence-square-homotopies
+      ( tr-concat p q)
+      ( tr² B ((left-whisker-concat p β) ∙ (right-whisker-concat α q')))
+      ( ((tr² B β) ·r (tr B p)) ∙h ((tr B q') ·l (tr² B α)))
+      ( tr-concat p' q')
   tr²-concat-left-whisker-right-whisker-concat β α =
     ( right-whisker-concat-htpy
       ( tr²-concat
@@ -141,10 +144,22 @@ module _
       ( tr²-left-whisker p β)
       ( tr²-right-whisker α q'))
 
+  tr²-left-unit-law-left-whisker-right-unit-law-right-whisker-concat :
+    (β : q ＝ q') (α : p ＝ p') →  
+    {!coherence-square-homotopies
+      ( tr²-concat α β)
+      !}
+  tr²-left-unit-law-left-whisker-right-unit-law-right-whisker-concat =
+    {!!}
+
+
   tr²-concat-right-whisker-left-whisker-concat :
     (α : p ＝ p') (β : q ＝ q') →
-    ((tr² B ((right-whisker-concat α q) ∙ (left-whisker-concat p' β))) ∙h (tr-concat p' q')) ~
-    ((tr-concat p q) ∙h (((tr B q) ·l (tr² B α)) ∙h ((tr² B β) ·r (tr B p'))))
+    coherence-square-homotopies
+      ( tr-concat p q)
+      ( tr² B ((right-whisker-concat α q) ∙ (left-whisker-concat p' β)))
+      ( ( ( tr B q) ·l (tr² B α)) ∙h ((tr² B β) ·r (tr B p')))
+      ( tr-concat p' q')      
   tr²-concat-right-whisker-left-whisker-concat α β =
     ( right-whisker-concat-htpy
       ( tr²-concat
@@ -184,13 +199,58 @@ module _
     refl-htpy
 ```
 
+
+
+
+
+
+
+
 The above coherences simplify when α and β are 2-loops.
 
-TODO
+TODO -- hold off on this? Choose between cube (leaning towards cube) and square format based on how we can get other squares?
 
 ```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {a : A}
+  {B : A → UU l2}
+  where
 
-t : {!!}
-t = {!!}
+  tr²-concat-left-whisker-right-whisker-concat-Ω² :
+    (β : refl {x = a} ＝ refl) (α : refl {x = a} ＝ refl) →
+    (tr² B ((left-whisker-concat refl β) ∙ (right-whisker-concat α refl))) ~
+    (((tr² B β) ·r (tr B refl)) ∙h ((tr B refl) ·l (tr² B α)))
+  tr²-concat-left-whisker-right-whisker-concat-Ω² β α x =
+    concat
+      {x = ( tr² B ((left-whisker-concat refl β) ∙ (right-whisker-concat α refl)) x)}
+      ( inv right-unit)
+      ( ( ((tr² B β) ·r (tr B refl)) ∙h ((tr B refl) ·l (tr² B α))) x)
+      ( tr²-concat-left-whisker-right-whisker-concat β α x)
+  
+  tr²-concat-right-whisker-left-whisker-concat-Ω² :
+    (α : refl {x = a} ＝ refl) (β : refl {x = a} ＝ refl) →
+    (tr² B ((right-whisker-concat α refl) ∙ (left-whisker-concat refl β))) ~
+    (((tr B refl) ·l (tr² B α)) ∙h ((tr² B β) ·r (tr B refl)))
+  tr²-concat-right-whisker-left-whisker-concat-Ω² α β = {!!}
+  
+module _
+  {l1 l2 : Level} {A : UU l1} {x y z : A}
+  {B : A → UU l2}
+  where
 
+  tr³-commutative-htpy-commutative-concat-Ω² :
+    {q q' : y ＝ z} (β : q ＝ q') {p p' : x ＝ y} (α : p ＝ p') →
+    coherence-square-homotopies
+      ( tr²-concat-left-whisker-right-whisker-concat β α)
+      ( right-whisker-concat-htpy
+        ( tr³
+          ( B)
+          ( commutative-left-whisker-right-whisker-concat β α))
+        ( tr-concat p' q'))
+      ( left-whisker-concat-htpy
+        ( tr-concat p q)
+        ( commutative-right-whisker-left-whisker-htpy (tr² B β) (tr² B α)))
+      ( tr²-concat-right-whisker-left-whisker-concat α β)
+  tr³-commutative-htpy-commutative-concat-Ω² {q = refl} refl {p = refl} refl =
+    refl-htpy
 ```
