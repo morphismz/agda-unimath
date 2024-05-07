@@ -8,11 +8,13 @@ module foundation.transport-along-higher-identifications where
 
 ```agda
 open import foundation.action-on-identifications-functions
+open import foundation.commuting-cubes-of-identifications
 open import foundation.commuting-squares-of-homotopies
 open import foundation.commuting-squares-of-identifications
 open import foundation.homotopies
 open import foundation.homotopy-algebra
 open import foundation.identity-types
+open import foundation.path-algebra
 open import foundation.universe-levels
 open import foundation.whiskering-homotopies-composition
 open import foundation.whiskering-homotopies-concatenation
@@ -112,7 +114,14 @@ module _
 
 ```
 
-#### Coherences related to commuting two dimensional identifications
+#### A coherence computing transport along commutative-left-whisker-right-whisker-concat
+
+This coherence naturally takes the form of a filler for a cube whose
+left face is `tr³ (commutative-left-whisker-right-whisker-concat β α)`
+and whose right face is
+`commutative-right-whisker-left-whisker-htpy (tr² B β) (tr² B α)`
+
+##### The top and bottom faces of the cube, respectively
 
 ```agda
 module _
@@ -143,15 +152,6 @@ module _
       ( tr-concat p' q')
       ( tr²-left-whisker p β)
       ( tr²-right-whisker α q'))
-
-  tr²-left-unit-law-left-whisker-right-unit-law-right-whisker-concat :
-    (β : q ＝ q') (α : p ＝ p') →  
-    {!coherence-square-homotopies
-      ( tr²-concat α β)
-      !}
-  tr²-left-unit-law-left-whisker-right-unit-law-right-whisker-concat =
-    {!!}
-
 
   tr²-concat-right-whisker-left-whisker-concat :
     (α : p ＝ p') (β : q ＝ q') →
@@ -197,6 +197,9 @@ module _
       ( tr²-concat-right-whisker-left-whisker-concat α β)
   tr³-commutative-htpy-commutative-concat {q = refl} refl {p = refl} refl =
     refl-htpy
+
+  t : {!coherence-cube-identifications!}
+  t = {!!}
 ```
 
 
