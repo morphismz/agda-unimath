@@ -129,30 +129,6 @@ module _
   {B : A → UU l2} {p p' : x ＝ y} {q q' : y ＝ z}
   where
 
-  tr²-concat-left-whisker-right-whisker-concat :
-    (β : q ＝ q') (α : p ＝ p') →
-    coherence-square-homotopies
-      ( tr-concat p q)
-      ( tr² B ((left-whisker-concat p β) ∙ (right-whisker-concat α q')))
-      ( ((tr² B β) ·r (tr B p)) ∙h ((tr B q') ·l (tr² B α)))
-      ( tr-concat p' q')
-  tr²-concat-left-whisker-right-whisker-concat β α =
-    ( right-whisker-concat-htpy
-      ( tr²-concat
-        ( left-whisker-concat p β)
-        ( right-whisker-concat α q'))
-      ( tr-concat p' q')) ∙h
-    ( vertical-pasting-coherence-square-homotopies
-      ( tr-concat p q)
-      ( tr² B (left-whisker-concat p β))
-      ( right-whisker-comp (tr² B β) (tr B p))
-      ( tr-concat p q')
-      ( tr² B (right-whisker-concat α q'))
-      ( left-whisker-comp (tr B q') (tr² B α))
-      ( tr-concat p' q')
-      ( tr²-left-whisker p β)
-      ( tr²-right-whisker α q'))
-
   tr²-concat-right-whisker-left-whisker-concat :
     (α : p ＝ p') (β : q ＝ q') →
     coherence-square-homotopies
@@ -177,6 +153,50 @@ module _
       ( tr²-right-whisker α q)
       ( tr²-left-whisker p' β))
 
+  tr²-concat-left-whisker-right-whisker-concat :
+    (β : q ＝ q') (α : p ＝ p') →
+    coherence-square-homotopies
+      ( tr-concat p q)
+      ( tr² B ((left-whisker-concat p β) ∙ (right-whisker-concat α q')))
+      ( ((tr² B β) ·r (tr B p)) ∙h ((tr B q') ·l (tr² B α)))
+      ( tr-concat p' q')
+  tr²-concat-left-whisker-right-whisker-concat β α =
+    ( right-whisker-concat-htpy
+      ( tr²-concat
+        ( left-whisker-concat p β)
+        ( right-whisker-concat α q'))
+      ( tr-concat p' q')) ∙h
+    ( vertical-pasting-coherence-square-homotopies
+      ( tr-concat p q)
+      ( tr² B (left-whisker-concat p β))
+      ( right-whisker-comp (tr² B β) (tr B p))
+      ( tr-concat p q')
+      ( tr² B (right-whisker-concat α q'))
+      ( left-whisker-comp (tr B q') (tr² B α))
+      ( tr-concat p' q')
+      ( tr²-left-whisker p β)
+      ( tr²-right-whisker α q'))
+```
+
+##### The cube
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {x y z : A}
+  {B : A → UU l2}
+  where
+
+  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies :
+    {!coherence-cube-homotopies
+      !}
+  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies = {!!}
+
+```
+
+Since the front and back faces of this cube are trivial, there is a
+simplified form of this coherence.
+
+```agda
 module _
   {l1 l2 : Level} {A : UU l1} {x y z : A}
   {B : A → UU l2}
@@ -198,10 +218,6 @@ module _
   tr³-commutative-htpy-commutative-concat {q = refl} refl {p = refl} refl =
     refl-htpy
 
-  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies :
-    {!coherence-cube-homotopies
-      !}
-  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies = {!!}
 ```
 
 
@@ -213,7 +229,10 @@ module _
 
 The above coherences simplify when α and β are 2-loops.
 
-TODO -- hold off on this? Choose between cube (leaning towards cube) and square format based on how we can get other squares?
+TODO -- How do this? Make cube lemmas?? E.g. if front and back face are trivial, then...
+
+
+OR square lemmas? e.g., pasting unit laws?
 
 ```agda
 module _
