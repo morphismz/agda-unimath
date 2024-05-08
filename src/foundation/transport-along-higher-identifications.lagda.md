@@ -8,7 +8,7 @@ module foundation.transport-along-higher-identifications where
 
 ```agda
 open import foundation.action-on-identifications-functions
-open import foundation.commuting-cubes-of-identifications
+open import foundation.commuting-cubes-of-homotopies
 open import foundation.commuting-squares-of-homotopies
 open import foundation.commuting-squares-of-identifications
 open import foundation.homotopies
@@ -198,8 +198,10 @@ module _
   tr³-commutative-htpy-commutative-concat {q = refl} refl {p = refl} refl =
     refl-htpy
 
-  t : {!coherence-cube-identifications!}
-  t = {!!}
+  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies :
+    {!coherence-cube-homotopies
+      !}
+  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies = {!!}
 ```
 
 
