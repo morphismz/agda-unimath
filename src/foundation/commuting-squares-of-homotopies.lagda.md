@@ -11,11 +11,11 @@ open import foundation-core.commuting-squares-of-homotopies public
 ```agda
 open import foundation.commuting-squares-of-identifications
 open import foundation.dependent-pair-types
+open import foundation.homotopies
 open import foundation.universe-levels
 
 open import foundation-core.equivalences
 open import foundation-core.functoriality-dependent-function-types
-open import foundation-core.homotopies
 ```
 
 </details>
@@ -539,4 +539,67 @@ module _
       ( λ x →
         equiv-double-whisker-coherence-square-identifications
           ( p x) (top x) (left x) (right x) (bottom x) (q x))
+```
+
+### Squares with refl on opposite sides
+
+There is an equivalence between homotopies H ~ H' and commutative
+squares of the form
+
+```text
+      refl-htpy
+   f ----------> f
+   |             |
+ H |             | H'
+   ∨            ∨
+   g ----------> g
+      refl-htpy
+```
+
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g : (x : A) → B x}
+  (H H' : f ~ g)
+  where
+
+  equiv-horizontal-refl-coherence-square-homotopies-htpy :
+    (H ~ H') ≃
+    ( coherence-square-homotopies
+      ( refl-htpy)
+      ( H)
+      ( H')
+      ( refl-htpy))
+  equiv-horizontal-refl-coherence-square-homotopies-htpy =
+    equiv-concat-htpy right-unit-htpy H'
+```
+
+There is an equivalence between homotopies `H ~ H'` and commutative
+squares of the form
+
+```text
+               H'
+          f ------> g
+          |         |
+refl-htpy |         | refl-htpy
+          ∨        ∨
+          f ------> g
+               H
+```
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g : (x : A) → B x}
+  (H H' : f ~ g) (K : H ~ H')
+  where
+
+  equiv-vertical-refl-coherence-square-homotopies-htpy :
+    (H ~ H') ≃
+    ( coherence-square-homotopies
+      ( H')
+      ( refl-htpy)
+      ( refl-htpy)
+      ( H))
+  equiv-vertical-refl-coherence-square-homotopies-htpy =
+    equiv-concat-htpy' H (inv-htpy right-unit-htpy)
 ```

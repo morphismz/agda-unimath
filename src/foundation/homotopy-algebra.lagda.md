@@ -97,14 +97,29 @@ module _
 ### Eckmann-Hilton for homotopies
 
 ```agda
-commutative-right-whisker-left-whisker-htpy :
+module _
   {l1 l2 l3 : Level} {X : UU l1} {Y : UU l2} {Z : UU l3}
-  {f g : X → Y} {f' g' : Y → Z} (H' : f' ~ g')
-  (H : f ~ g) →
-  ((H' ·r f) ∙h (g' ·l H)) ~
-  ((f' ·l H) ∙h (H' ·r g))
-commutative-right-whisker-left-whisker-htpy H' H x =
-    coh-horizontal-concat-htpy H' H x
+  {f g : X → Y} {f' g' : Y → Z}
+  where
+
+  left-whisker-right-whisker-concat-htpy :
+    (H : f ~ g) (H' : f' ~ g') →
+    f' ∘ f ~ g' ∘ g
+  left-whisker-right-whisker-concat-htpy H H' =
+    ((f' ·l H) ∙h (H' ·r g))
+
+  right-whisker-left-whisker-concat-htpy :
+    (H' : f' ~ g') (H : f ~ g) →
+    f' ∘ f ~ g' ∘ g
+  right-whisker-left-whisker-concat-htpy H' H =
+    ((H' ·r f) ∙h (g' ·l H))
+
+  commutative-right-whisker-left-whisker-htpy :
+    (H' : f' ~ g') (H : f ~ g) → 
+    right-whisker-left-whisker-concat-htpy H' H ~
+    left-whisker-right-whisker-concat-htpy H H'
+  commutative-right-whisker-left-whisker-htpy H' H x =
+      coh-horizontal-concat-htpy H' H x
 
 eckmann-hilton-htpy :
   {l : Level} {X : UU l} (H K : id {A = X} ~ id) →

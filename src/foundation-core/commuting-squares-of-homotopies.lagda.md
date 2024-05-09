@@ -108,6 +108,67 @@ module _
     vertical-refl-coherence-square-identifications (H x)
 ```
 
+### Squares with refl on opposite sides
+
+Given a homotopy `H ~ H'`, we can obtain a commutative square with
+`refl-htpy` on the top and bottom.
+
+```text
+      refl-htpy
+   f ----------> f
+   |             |
+ H |             | H'
+   ∨            ∨
+   g ----------> g
+      refl-htpy
+```
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g : (x : A) → B x}
+  (H H' : f ~ g) (K : H ~ H')
+  where
+
+  horizontal-refl-coherence-square-homotopies-htpy :
+    coherence-square-homotopies
+      ( refl-htpy)
+      ( H)
+      ( H')
+      ( refl-htpy)
+  horizontal-refl-coherence-square-homotopies-htpy =
+    right-unit-htpy ∙h K
+```
+
+Given a homotopy `H ~ H'`, we can obtain a commutative square with
+`refl-htpy` on the left and right.
+
+```text
+               H'
+          f ------> g
+          |         |
+refl-htpy |         | refl-htpy
+          ∨        ∨
+          f ------> g
+               H
+```
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g : (x : A) → B x}
+  (H H' : f ~ g) (K : H ~ H')
+  where
+
+  vertical-refl-coherence-square-homotopies-htpy :
+    coherence-square-homotopies
+      ( H')
+      ( refl-htpy)
+      ( refl-htpy)
+      ( H)
+  vertical-refl-coherence-square-homotopies-htpy =
+    K ∙h inv-htpy right-unit-htpy
+```
+
+
 ## Operations
 
 ### Inverting squares of homotopies horizontally

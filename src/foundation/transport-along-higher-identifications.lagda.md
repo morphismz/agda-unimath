@@ -133,8 +133,8 @@ module _
     (α : p ＝ p') (β : q ＝ q') →
     coherence-square-homotopies
       ( tr-concat p q)
-      ( tr² B ((right-whisker-concat α q) ∙ (left-whisker-concat p' β)))
-      ( ( ( tr B q) ·l (tr² B α)) ∙h ((tr² B β) ·r (tr B p')))
+      ( tr² B (right-whisker-left-whisker-concat α β))
+      ( left-whisker-right-whisker-concat-htpy (tr² B α) (tr² B β))
       ( tr-concat p' q')      
   tr²-concat-right-whisker-left-whisker-concat α β =
     ( right-whisker-concat-htpy
@@ -157,8 +157,8 @@ module _
     (β : q ＝ q') (α : p ＝ p') →
     coherence-square-homotopies
       ( tr-concat p q)
-      ( tr² B ((left-whisker-concat p β) ∙ (right-whisker-concat α q')))
-      ( ((tr² B β) ·r (tr B p)) ∙h ((tr B q') ·l (tr² B α)))
+      ( tr² B (left-whisker-right-whisker-concat β α))
+      ( right-whisker-left-whisker-concat-htpy (tr² B β) (tr² B α))
       ( tr-concat p' q')
   tr²-concat-left-whisker-right-whisker-concat β α =
     ( right-whisker-concat-htpy
@@ -187,9 +187,43 @@ module _
   where
 
   tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies :
-    {!coherence-cube-homotopies
-      !}
-  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies = {!!}
+    {q q' : y ＝ z} (β : q ＝ q') {p p' : x ＝ y} (α : p ＝ p') →  
+    coherence-cube-homotopies
+      ( refl-htpy)
+      ( tr-concat p q)
+      ( tr²
+        ( B)
+        ( right-whisker-left-whisker-concat α β))
+      ( tr-concat p q)
+      ( tr²
+        ( B)
+        ( left-whisker-right-whisker-concat β α))
+      ( refl-htpy)
+      ( left-whisker-right-whisker-concat-htpy (tr² B α) (tr² B β))
+      ( refl-htpy)
+      ( tr-concat p' q')
+      ( right-whisker-left-whisker-concat-htpy (tr² B β) (tr² B α))
+      ( tr-concat p' q')
+      ( refl-htpy)
+      ( vertical-refl-coherence-square-homotopies
+        ( tr-concat p q))
+      ( vertical-refl-coherence-square-homotopies-htpy
+        ( tr² B (left-whisker-right-whisker-concat β α))
+        ( tr² B (right-whisker-left-whisker-concat α β))
+        ( tr³ B (commutative-left-whisker-right-whisker-concat β α)))
+      ( inv-htpy (tr²-concat-right-whisker-left-whisker-concat α β))
+      ( inv-htpy (tr²-concat-left-whisker-right-whisker-concat β α))
+      (vertical-refl-coherence-square-homotopies-htpy
+        ( right-whisker-left-whisker-concat-htpy (tr² B β) (tr² B α))
+        ( left-whisker-right-whisker-concat-htpy (tr² B α) (tr² B β))
+        ( commutative-right-whisker-left-whisker-htpy
+          ( tr² B β)
+          ( tr² B α)))
+      (vertical-refl-coherence-square-homotopies
+        ( tr-concat p' q'))      
+  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies
+    {q = refl} refl {p = refl} refl = 
+      refl-htpy
 
 ```
 
@@ -217,7 +251,6 @@ module _
       ( tr²-concat-right-whisker-left-whisker-concat α β)
   tr³-commutative-htpy-commutative-concat {q = refl} refl {p = refl} refl =
     refl-htpy
-
 ```
 
 
