@@ -117,7 +117,7 @@ module _
 #### A coherence computing transport along commutative-left-whisker-right-whisker-concat
 
 This coherence naturally takes the form of a filler for a cube whose
-left face is `tr³ (commutative-left-whisker-right-whisker-concat β α)`
+left face is `tr³ B (commutative-left-whisker-right-whisker-concat β α)`
 and whose right face is
 `commutative-right-whisker-left-whisker-htpy (tr² B β) (tr² B α)`
 
@@ -224,11 +224,12 @@ module _
   tr³-commutative-left-whisker-right-whisker-concat-coherence-cube-homotopies
     {q = refl} refl {p = refl} refl = 
       refl-htpy
-
 ```
 
 Since the front and back faces of this cube are trivial, there is a
 simplified form of this coherence.
+
+NOTE: this doesn't match up with the coherence cube. Top and bottom are flipped
 
 ```agda
 module _
