@@ -182,7 +182,7 @@ homotopies automatically commute with each other via the homotopy
 Now, the naturality condition that makes `α` and `β` commute in `Ω² X` (which is
 `commutative-left-whisker-right-whisker-concat`) is sent by `tr³ B` to the
 homotopy above. This is shown in
-[`tr³-commutative-htpy-commutative-concat`](foundation.transport-along-identifications.md).
+[`tr³-commutative-left-whisker-right-whisker-concat`](foundation.transport-along-identifications.md).
 From this, it is easy to show that "transport preserves the Eckmann-Hilton
 identification" by proving that the additional coherence identification in the
 definition of `eckmann-hilton` and `eckmann-hilton-htpy` are compatible.

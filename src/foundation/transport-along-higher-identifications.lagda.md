@@ -186,7 +186,7 @@ module _
   {B : A → UU l2}
   where
 
-  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies :
+  tr³-commutative-left-whisker-right-whisker-concat-coherence-cube-homotopies :
     {q q' : y ＝ z} (β : q ＝ q') {p p' : x ＝ y} (α : p ＝ p') →  
     coherence-cube-homotopies
       ( refl-htpy)
@@ -221,7 +221,7 @@ module _
           ( tr² B α)))
       (vertical-refl-coherence-square-homotopies
         ( tr-concat p' q'))      
-  tr³-commutative-htpy-commutative-concat-coherence-cube-homotopies
+  tr³-commutative-left-whisker-right-whisker-concat-coherence-cube-homotopies
     {q = refl} refl {p = refl} refl = 
       refl-htpy
 
@@ -236,7 +236,7 @@ module _
   {B : A → UU l2}
   where
 
-  tr³-commutative-htpy-commutative-concat :
+  tr³-commutative-left-whisker-right-whisker-concat :
     {q q' : y ＝ z} (β : q ＝ q') {p p' : x ＝ y} (α : p ＝ p') →
     coherence-square-homotopies
       ( tr²-concat-left-whisker-right-whisker-concat β α)
@@ -249,7 +249,7 @@ module _
         ( tr-concat p q)
         ( commutative-right-whisker-left-whisker-htpy (tr² B β) (tr² B α)))
       ( tr²-concat-right-whisker-left-whisker-concat α β)
-  tr³-commutative-htpy-commutative-concat {q = refl} refl {p = refl} refl =
+  tr³-commutative-left-whisker-right-whisker-concat {q = refl} refl {p = refl} refl =
     refl-htpy
 ```
 
@@ -295,7 +295,7 @@ module _
   {B : A → UU l2}
   where
 
-  tr³-commutative-htpy-commutative-concat-Ω² :
+  tr³-commutative-left-whisker-right-whisker-concat-Ω² :
     {q q' : y ＝ z} (β : q ＝ q') {p p' : x ＝ y} (α : p ＝ p') →
     coherence-square-homotopies
       ( tr²-concat-left-whisker-right-whisker-concat β α)
@@ -308,6 +308,6 @@ module _
         ( tr-concat p q)
         ( commutative-right-whisker-left-whisker-htpy (tr² B β) (tr² B α)))
       ( tr²-concat-right-whisker-left-whisker-concat α β)
-  tr³-commutative-htpy-commutative-concat-Ω² {q = refl} refl {p = refl} refl =
+  tr³-commutative-left-whisker-right-whisker-concat-Ω² {q = refl} refl {p = refl} refl =
     refl-htpy
 ```
