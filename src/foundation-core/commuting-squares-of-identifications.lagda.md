@@ -104,6 +104,58 @@ module _
   vertical-refl-coherence-square-identifications = inv right-unit
 ```
 
+### Squares with `refl` on opposite sides
+
+An identification `α : p ＝ q` induces a filler for the coherence square
+
+```text
+       refl
+    a -----> a
+    |        |
+  p |        | q
+    ∨        ∨
+    b -----> b.
+       refl
+```
+
+It also induces a square
+
+```text
+           q
+       a -----> b
+       |        |
+  refl |        | refl
+       ∨        ∨
+       a -----> b.
+           p
+```
+
+
+```agda
+module _
+  {l : Level} {A : UU l} {a b : A} (p q : a ＝ b) (α : p ＝ q)
+  where
+
+  right-unit-left-unit-coherence-square-identifications :
+    coherence-square-identifications
+      ( refl)
+      ( p)
+      ( q)
+      ( refl)
+  right-unit-left-unit-coherence-square-identifications =
+    right-unit ∙ α
+
+
+  left-unit-right-unit-coherence-square-identifications :
+    coherence-square-identifications
+      ( q)
+      ( refl)
+      ( refl)
+      ( p)
+  left-unit-right-unit-coherence-square-identifications =
+    α ∙ inv right-unit
+```
+
 ## Operations
 
 ### Inverting squares of identifications horizontally

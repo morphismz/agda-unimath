@@ -11,6 +11,7 @@ open import foundation.action-on-identifications-functions
 open import foundation.commuting-cubes-of-homotopies
 open import foundation.commuting-squares-of-homotopies
 open import foundation.commuting-squares-of-identifications
+open import foundation.function-types
 open import foundation.homotopies
 open import foundation.homotopy-algebra
 open import foundation.identity-types
@@ -64,6 +65,8 @@ module _
 
 ### Coherences and algebraic identities for `tr²`
 
+#### Computing `tr²` of a composite path
+
 ```agda
 module _
   {l1 l2 : Level} {A : UU l1} {x y : A}
@@ -74,31 +77,68 @@ module _
     {p p' p'' : x ＝ y} (α : p ＝ p') (α' : p' ＝ p'') (b : B x) →
     (tr² B (α ∙ α') b) ＝ (tr² B α b ∙ tr² B α' b)
   tr²-concat α α' b = ap-concat (λ t → tr B t b) α α'
+```
 
+#### Computing `tr²` of `left-unit` and `right-unit`
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {x y : A} 
+  where
+
+  tr²-left-unit :
+    {p : x ＝ y} → tr² B left-unit ~ tr-concat refl p
+  tr²-left-unit = refl-htpy
+
+  tr²-right-unit :
+    {p : x ＝ y} → tr² B right-unit ~ tr-concat p refl
+  tr²-right-unit {refl} = refl-htpy
+```
+
+```
 module _
   {l1 l2 : Level} {A : UU l1} {x y z : A}
   {B : A → UU l2}
   where
 
   tr²-left-whisker :
-    (p : x ＝ y) {q q' : y ＝ z} (β : q ＝ q') (b : B x) →
-    coherence-square-identifications
-      ( tr-concat p q b)
-      ( tr² B (left-whisker-concat p β) b)
-      ( right-whisker-comp (tr² B β) (tr B p) b)
-      ( tr-concat p q' b)
-  tr²-left-whisker refl refl b = refl
+    (p : x ＝ y) {q q' : y ＝ z} (β : q ＝ q') →
+    coherence-square-homotopies
+      ( tr-concat p q)
+      ( tr² B (left-whisker-concat p β))
+      ( right-whisker-comp (tr² B β) (tr B p))
+      ( tr-concat p q')
+  tr²-left-whisker refl β =
+    horizontal-refl-coherence-square-homotopies-htpy
+       ( tr² B (left-whisker-concat refl β))
+       ( right-whisker-comp (tr² B β) id)
+       ( tr³ B (left-unit-law-left-whisker-concat β))
 
   tr²-right-whisker :
-    {p p' : x ＝ y} (α : p ＝ p') (q : y ＝ z) (b : B x) →
-    coherence-square-identifications
+    {p p' : x ＝ y} (α : p ＝ p') (q : y ＝ z) →
+    coherence-square-homotopies
+      ( tr-concat p q)
+      ( tr² B (right-whisker-concat α q))
+      ( left-whisker-comp (tr B q) (tr² B α))
+      ( tr-concat p' q)
+  tr²-right-whisker {p} {p'} α q b =
+    {!concat-left-identification-coherence-square-identifications
       ( tr-concat p q b)
-      ( tr² B (right-whisker-concat α q) b)
+      ( ap ((λ t → tr B t b) ∘ (λ t → t ∙ q)) α)
       ( left-whisker-comp (tr B q) (tr² B α) b)
       ( tr-concat p' q b)
-  tr²-right-whisker refl refl b = inv right-unit
+      ( ap-comp (λ t → tr B t b) (λ t → t ∙ q) α)
+      ( concat-right-identification-coherence-square-identifications
+        ( tr-concat p q b)
+        ( ap ((λ t → tr B t b) ∘ (λ t → t ∙ q)) α)
+        ( {!ap ((λ t → tr B t b) ∘ (λ t → t ∙ q)) α!})
+        ( tr-concat p' q b)
+        ( {!!})
+        ( {!!}))!}
 ```
 
+
+inv (nat-htpy (λ t → tr-concat t q b) α)
 ### Coherences and algebraic identities for `tr³`
 
 ```agda
