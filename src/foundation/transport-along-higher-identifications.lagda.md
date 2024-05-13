@@ -87,12 +87,12 @@ module _
   where
 
   tr²-left-unit :
-    {p : x ＝ y} → tr² B left-unit ~ tr-concat refl p
-  tr²-left-unit = refl-htpy
+    (p : x ＝ y) → tr² B left-unit ~ tr-concat refl p
+  tr²-left-unit p = refl-htpy
 
   tr²-right-unit :
-    {p : x ＝ y} → tr² B right-unit ~ tr-concat p refl
-  tr²-right-unit {refl} = refl-htpy
+    (p : x ＝ y) → tr² B right-unit ~ tr-concat p refl
+  tr²-right-unit refl = refl-htpy
 ```
 
 ```
@@ -121,22 +121,58 @@ module _
       ( tr² B (right-whisker-concat α q))
       ( left-whisker-comp (tr B q) (tr² B α))
       ( tr-concat p' q)
-  tr²-right-whisker {p} {p'} α q b =
-    {!concat-left-identification-coherence-square-identifications
-      ( tr-concat p q b)
-      ( ap ((λ t → tr B t b) ∘ (λ t → t ∙ q)) α)
-      ( left-whisker-comp (tr B q) (tr² B α) b)
-      ( tr-concat p' q b)
-      ( ap-comp (λ t → tr B t b) (λ t → t ∙ q) α)
-      ( concat-right-identification-coherence-square-identifications
-        ( tr-concat p q b)
-        ( ap ((λ t → tr B t b) ∘ (λ t → t ∙ q)) α)
-        ( {!ap ((λ t → tr B t b) ∘ (λ t → t ∙ q)) α!})
-        ( tr-concat p' q b)
-        ( {!!})
-        ( {!!}))!}
-```
+  tr²-right-whisker {p} {p'} refl refl = inv-htpy right-unit-htpy
 
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2}
+  where
+
+  t : 
+    {x y : A} (p : x ＝ y) (β : refl {x = y} ＝ refl) (b : B x) →
+    ( ( left-whisker-concat (tr² B (left-whisker-concat p β) b) (tr²-right-unit p b) ∙ 
+    ( tr²-left-whisker p β b))) ＝
+    ( inv ( {!nat-htpy ((λ t → tr B t b) ·l right-unit-htpy) β!}) ∙
+    ( right-whisker-concat (tr²-right-unit p b) ((tr² B β ·r tr B p) b)))
+  t = {!!}
+
+--how best to phrase this coherence for optimal use later, and for reusability? 
+
+  t' :
+    {x y : A} {p p' : x ＝ y} (α : p ＝ p') (b : B x) →
+    (tr²-right-whisker α refl b) ＝
+    inv ((ap-concat (λ t → tr B t b) (right-whisker-concat α refl) (right-unit {p = p'})) ∙
+    (left-whisker-concat (tr² B (right-whisker-concat α refl) b) (tr²-right-unit p' b) )) ∙ 
+    (tr³ B (inv (right-unit-law-right-whisker-concat α)) b) ∙
+    (tr²-concat right-unit α b) ∙
+    (right-whisker-concat (tr²-right-unit p b) (tr² B α b)) ∙
+    inv (left-whisker-concat (tr-concat p refl b) ( left-unit-law-left-whisker-comp (tr² B α) b))
+  t' {p = refl} {p' = refl} refl b = refl
+
+  ha :
+    {x : A} (α : refl {x = x} ＝ refl) → 
+    coherence-square-homotopies
+      ( right-unit-htpy)
+      ( tr²-right-whisker α refl)
+      ( tr³ B (inv (right-unit-law-right-whisker-concat α ∙ right-unit)))
+      ( left-unit-law-left-whisker-comp (tr² B α))
+  ha α = {!t'!}
+```
+    ( (left-whisker-concat (tr² B (right-whisker-concat α refl) b) (tr²-right-unit p' b)) ∙ (tr²-right-whisker α refl b)) ∙ right-whisker-concat (inv (tr²-right-unit p b)) ((id ·l tr² B α) b) ＝
+    ( inv (right-whisker-concat (ap-comp (λ t → tr B t b) (λ t → t ∙ refl) α) (tr² B right-unit b)) ∙ inv (nat-htpy ((λ t → tr B t b) ·l right-unit-htpy) α) ∙ {!left-whisker-concat refl ?!})
+
+    concat-left-identification-coherence-square-identifications
+      ( tr-concat p refl b)
+      ( ap ((λ t → tr B t b) ∘ (λ t → t ∙ refl)) α)
+      ( left-whisker-comp (tr B refl) (tr² B α) b)
+      ( tr-concat p' refl b)
+      ( ap-comp (λ t → tr B t b) (λ t → t ∙ refl) α)
+      ( concat-right-identification-coherence-square-identifications
+        ( tr-concat p refl b)
+        ( ap ((λ t → tr B t b) ∘ (λ t → t ∙ refl)) α)
+        ( {!ap ((λ t → tr B t b) ∘ (λ t → t ∙ refl)) α!})
+        ( tr-concat p' refl b)
+        ( {!!})
+        ( {!!}))
 
 inv (nat-htpy (λ t → tr-concat t q b) α)
 ### Coherences and algebraic identities for `tr³`
