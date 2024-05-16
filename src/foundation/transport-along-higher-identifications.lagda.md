@@ -93,6 +93,11 @@ module _
   tr²-right-unit :
     (p : x ＝ y) → tr² B right-unit ~ tr-concat p refl
   tr²-right-unit refl = refl-htpy
+
+  tr³-right-unit :
+    {p q : x ＝ y} (α : p ＝ q) →
+    tr³ B (right-unit {p = α}) ~ tr²-concat α refl ∙h right-unit-htpy
+  tr³-right-unit refl = refl-htpy
 ```
 
 ```
@@ -135,7 +140,7 @@ module _
     ( right-whisker-concat (tr²-right-unit p b) ((tr² B β ·r tr B p) b)))
   t = {!!}
 
---how best to phrase this coherence for optimal use later, and for reusability? 
+--how best to phrase this coherence for optimal use later, and for reusability?
 
   t' :
     {x y : A} {p p' : x ＝ y} (α : p ＝ p') (b : B x) →
@@ -187,6 +192,26 @@ module _
     {α α' α'' : p ＝ p'} (γ : α ＝ α') (δ : α' ＝ α'') →
     tr³ B (γ ∙ δ) ~ (tr³ B γ) ∙h (tr³ B δ)
   tr³-concat γ δ b = ap-concat (λ t → tr² B t b) γ δ
+
+  tr³-left-unit-law-left-whisker-concat :
+    (α : p ＝ p') →
+    coherence-square-homotopies
+      ( {!(tr²-concat (left-whisker-concat refl α) (left-unit)) ∙h ?!})
+      ( tr³ B (left-unit-law-left-whisker-concat α))
+      ( {!!})
+      ( ( tr²-concat left-unit α) ∙h right-whisker-concat-htpy (tr²-left-unit p) (tr² B α))
+  tr³-left-unit-law-left-whisker-concat = {!!}
+
+  tr³-right-unit-law-right-whisker-concat :
+    (α : p ＝ p') →
+    coherence-square-homotopies
+      ( {!(tr²-concat (right-whisker-concat αrefl) (right-unit)) ∙h ?!})
+      ( tr³ B (right-unit-law-right-whisker-concat α))
+      ( {!tr²-right-whisker refl α!})
+      ( ( tr²-concat (right-whisker-concat α refl) right-unit) ∙h
+        ( left-whisker-concat-htpy (tr² B (right-whisker-concat α refl)) (tr²-right-unit p'))  ∙h
+          ( {!!}))
+  tr³-right-unit-law-right-whisker-concat = {!!}
 
 ```
 
