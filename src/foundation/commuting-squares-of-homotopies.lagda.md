@@ -16,6 +16,7 @@ open import foundation.universe-levels
 
 open import foundation-core.equivalences
 open import foundation-core.functoriality-dependent-function-types
+open import foundation-core.identity-types
 ```
 
 </details>
@@ -563,14 +564,14 @@ module _
   (H H' : f ~ g)
   where
 
-  equiv-horizontal-refl-coherence-square-homotopies-htpy :
+  equiv-coherence-square-homotopies-horizontal-refl :
     (H ~ H') ≃
     ( coherence-square-homotopies
       ( refl-htpy)
       ( H)
       ( H')
       ( refl-htpy))
-  equiv-horizontal-refl-coherence-square-homotopies-htpy =
+  equiv-coherence-square-homotopies-horizontal-refl =
     equiv-concat-htpy right-unit-htpy H'
 ```
 
@@ -593,13 +594,67 @@ module _
   (H H' : f ~ g) (K : H ~ H')
   where
 
-  equiv-vertical-refl-coherence-square-homotopies-htpy :
+  equiv-coherence-square-homotopies-vertical-refl :
     (H ~ H') ≃
     ( coherence-square-homotopies
       ( H')
       ( refl-htpy)
       ( refl-htpy)
       ( H))
-  equiv-vertical-refl-coherence-square-homotopies-htpy =
+  equiv-coherence-square-homotopies-vertical-refl =
     equiv-concat-htpy' H (inv-htpy right-unit-htpy)
+```
+
+
+### Computing the pasting of two squares with refl on opposite sides
+
+Consider two squares of homotopies as in the diagram
+
+```text
+                  refl
+              a --------> a
+              |           |
+     top-left |           | top-right
+              ∨  refl    ∨
+              b --------> b
+              |           |
+  bottom-left |           | bottom-right
+              ∨           ∨
+              c --------> c
+                  refl
+```
+
+The result of vertically pasting these squares can be computed in terms
+of the horizontal concatination of homotopies
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {a b c : (x : A) → B x}
+  (top-left : a ~ b) (top-right : a ~ b)
+  (bottom-left : b ~ c) (bottom-right : b ~ c)
+  where
+
+
+  vertical-pasting-coherence-square-homotopies-horizontal-refl :
+    (H : top-left ~ top-right) (K : bottom-left ~ bottom-right) →
+    (inv-htpy right-unit-htpy) ∙h
+    ( vertical-pasting-coherence-square-homotopies
+      ( refl-htpy)
+      ( top-left)
+      ( top-right)
+      ( refl-htpy)
+      ( bottom-left)
+      ( bottom-right)
+      ( refl-htpy)
+      ( coherence-square-homotopies-horizontal-refl top-left top-right H)
+      ( coherence-square-homotopies-horizontal-refl bottom-left bottom-right K)) ~
+    (horizontal-concat-htpy² H K)
+  vertical-pasting-coherence-square-homotopies-horizontal-refl H K x =
+    vertical-pasting-coherence-square-identifications-horizontal-refl
+      ( top-left x)
+      ( top-right x)
+      ( bottom-left x)
+      ( bottom-right x)
+      ( H x)
+      ( K x)
 ```

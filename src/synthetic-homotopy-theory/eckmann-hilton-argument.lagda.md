@@ -358,7 +358,7 @@ module _
       ( compute-inv-inv-eckmann-hilton-Ω² s s))
 ```
 
-### Transport preserves the Eckmann-Hilton identification
+### Computing transport along `eckmann-hilton`
 
 ```agda
 module _
@@ -416,7 +416,11 @@ module _
       ( tr³ B (eckmann-hilton-Ω² α β))
       ( eckmann-hilton-htpy (tr² B α) (tr² B β))
       ( tr²-concat β α)
-  tr³-eckmann-hilton =
+  tr³-eckmann-hilton = ?
+
+```
+
+
     inv-concat-left-homotopy-coherence-square-homotopies
       ( tr²-concat α β)
       ( tr³ B (eckmann-hilton-Ω² α β))
@@ -447,7 +451,7 @@ module _
         ( tr²-concat β α)
         ( {!!})
         ( {!!}))
-```
+
       
       ( {!assoc!})      
 

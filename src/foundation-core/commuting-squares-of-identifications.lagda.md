@@ -136,23 +136,23 @@ module _
   {l : Level} {A : UU l} {a b : A} (p q : a ＝ b) (α : p ＝ q)
   where
 
-  right-unit-left-unit-coherence-square-identifications :
+  coherence-square-identifications-horizontal-refl :
     coherence-square-identifications
       ( refl)
       ( p)
       ( q)
       ( refl)
-  right-unit-left-unit-coherence-square-identifications =
+  coherence-square-identifications-horizontal-refl =
     right-unit ∙ α
 
 
-  left-unit-right-unit-coherence-square-identifications :
+  coherence-square-identifications-vertical-refl :
     coherence-square-identifications
       ( q)
       ( refl)
       ( refl)
       ( p)
-  left-unit-right-unit-coherence-square-identifications =
+  coherence-square-identifications-vertical-refl =
     α ∙ inv right-unit
 ```
 

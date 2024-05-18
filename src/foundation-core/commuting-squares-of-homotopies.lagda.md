@@ -129,13 +129,13 @@ module _
   (H H' : f ~ g) (K : H ~ H')
   where
 
-  horizontal-refl-coherence-square-homotopies-htpy :
+  coherence-square-homotopies-horizontal-refl :
     coherence-square-homotopies
       ( refl-htpy)
       ( H)
       ( H')
       ( refl-htpy)
-  horizontal-refl-coherence-square-homotopies-htpy =
+  coherence-square-homotopies-horizontal-refl =
     right-unit-htpy ∙h K
 ```
 
@@ -158,13 +158,13 @@ module _
   (H H' : f ~ g) (K : H ~ H')
   where
 
-  vertical-refl-coherence-square-homotopies-htpy :
+  coherence-square-homotopies-vertical-refl :
     coherence-square-homotopies
       ( H')
       ( refl-htpy)
       ( refl-htpy)
       ( H)
-  vertical-refl-coherence-square-homotopies-htpy =
+  coherence-square-homotopies-vertical-refl =
     K ∙h inv-htpy right-unit-htpy
 ```
 
