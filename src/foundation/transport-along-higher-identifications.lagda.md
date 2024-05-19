@@ -384,3 +384,22 @@ module _
            ( tr² B β)))
        ( tr³-commutative-left-whisker-right-whisker-concat α β)) 
 ```
+
+Some coherences between these coherences
+
+```agda
+
+module _
+  {l1 l2 : Level} {A : UU l1} {x y z : A}
+  {B : A → UU l2}
+  where
+
+  test :
+    {p p' p'' : x ＝ y} (α : p ＝ p') (β : p' ＝ p'') →
+    coherence-square-homotopies
+      ( tr²-concat α β)
+      ( {!!})
+      ( {!!})
+      ( {!tr²-concat-left-whisker-right-whisker-concat α !})
+  test = {!!}
+```
