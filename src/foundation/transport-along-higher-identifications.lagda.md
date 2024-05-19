@@ -33,7 +33,7 @@ module _
   {l1 l2 : Level} {A : UU l1} {x y : A} {p p' : x ＝ y}
   where
 
-  tr² : (B : A → UU l2) (α : p ＝ p') (b : B x) → (tr B p b) ＝ (tr B p' b)
+  tr² : (B : A → UU l2) (α : p ＝ p') → (tr B p) ~ (tr B p')
   tr² B α b = ap (λ t → tr B t b) α
 
 module _
@@ -41,7 +41,7 @@ module _
   {α α' : p ＝ p'}
   where
 
-  tr³ : (B : A → UU l2) (β : α ＝ α') (b : B x) → (tr² B α b) ＝ (tr² B α' b)
+  tr³ : (B : A → UU l2) (β : α ＝ α') → (tr² B α) ~ (tr² B α')
   tr³ B β b = ap (λ t → tr² B t b) β
 ```
 
@@ -65,7 +65,7 @@ module _
 
 ### Coherences and algebraic identities for `tr²`
 
-#### Computing `tr²` of a composite path
+#### Computing `tr²` along a concatination of paths
 
 ```agda
 module _
@@ -180,25 +180,6 @@ module _
       ( right-whisker-concat-htpy (tr²-right-unit p) (tr² B α)))
   tr³-right-unit-law-right-whisker-concat {p = refl} {p' = refl} refl =
     refl-htpy
-```
-
-The above computations simplify when `β` and `α` are 2-loops
-
-```agda
-  tr³-left-unit-law-left-whisker-concat-Ω² :
-    {x : A} (β : refl {x = x} ＝ refl) →
-    {!tr²-left-whisker!}
-  tr³-left-unit-law-left-whisker-concat-Ω² = {!!}
-
-  tr³-right-unit-law-right-whisker-concat-Ω² :
-    {x : A} (α : refl {x = x} ＝ refl) →
-    ( ( tr²-right-whisker α refl) ∙h
-    ( left-whisker-concat-htpy refl-htpy (left-unit-law-left-whisker-comp (tr² B α)))) ＝
-    {!coherence-square-homotopies-horizontal-refl
-      ( tr² B ((right-whisker-concat α refl) ∙ right-unit))
-      ( tr² B (right-unit ∙ α))
-      ( tr³ B (inv (right-unit-law-right-whisker-concat α)))!}
-  tr³-right-unit-law-right-whisker-concat-Ω² = {!!}  
 ```
 
 #### Computing transport along `commutative-left-whisker-right-whisker-concat`
@@ -341,7 +322,7 @@ module _
     refl-htpy
 ```
 
-The above coherences simplify when α and β are 2-loops.
+The above coherence can be simplified when `α` and `β` are 2-loops
 
 ```agda
 module _
@@ -350,40 +331,56 @@ module _
   where
 
   tr²-concat-left-whisker-right-whisker-concat-Ω² :
-    (β : refl {x = a} ＝ refl) (α : refl {x = a} ＝ refl) →
-    (tr² B ((left-whisker-concat refl β) ∙ (right-whisker-concat α refl))) ~
-    (((tr² B β) ·r (tr B refl)) ∙h ((tr B refl) ·l (tr² B α)))
-  tr²-concat-left-whisker-right-whisker-concat-Ω² β α x =
-    concat
-      {x = ( tr² B ((left-whisker-concat refl β) ∙ (right-whisker-concat α refl)) x)}
-      ( inv right-unit)
-      ( ( ((tr² B β) ·r (tr B refl)) ∙h ((tr B refl) ·l (tr² B α))) x)
-      ( tr²-concat-left-whisker-right-whisker-concat β α x)
-  
+    (α β : refl {x = a} ＝ refl) →
+    (tr² B ((left-whisker-concat refl α) ∙ (right-whisker-concat β refl))) ~
+    (((tr² B α) ·r (tr B refl)) ∙h ((tr B refl) ·l (tr² B β)))
+  tr²-concat-left-whisker-right-whisker-concat-Ω² α β =
+    ( inv-htpy right-unit-htpy) ∙h
+    ( tr²-concat-left-whisker-right-whisker-concat α β)
+      
   tr²-concat-right-whisker-left-whisker-concat-Ω² :
-    (α : refl {x = a} ＝ refl) (β : refl {x = a} ＝ refl) →
+    (α β : refl {x = a} ＝ refl) →
     (tr² B ((right-whisker-concat α refl) ∙ (left-whisker-concat refl β))) ~
     (((tr B refl) ·l (tr² B α)) ∙h ((tr² B β) ·r (tr B refl)))
-  tr²-concat-right-whisker-left-whisker-concat-Ω² α β = {!!}
+  tr²-concat-right-whisker-left-whisker-concat-Ω² α β =
+    inv-htpy right-unit-htpy ∙h tr²-concat-right-whisker-left-whisker-concat α β
   
-module _
-  {l1 l2 : Level} {A : UU l1} {x y z : A}
-  {B : A → UU l2}
-  where
-
   tr³-commutative-left-whisker-right-whisker-concat-Ω² :
-    {q q' : y ＝ z} (β : q ＝ q') {p p' : x ＝ y} (α : p ＝ p') →
+    (α β : refl {x = a} ＝ refl) →
     coherence-square-homotopies
-      ( tr²-concat-left-whisker-right-whisker-concat β α)
-      ( right-whisker-concat-htpy
-        ( tr³
-          ( B)
-          ( commutative-left-whisker-right-whisker-concat β α))
-        ( tr-concat p' q'))
-      ( left-whisker-concat-htpy
-        ( tr-concat p q)
-        ( commutative-right-whisker-left-whisker-htpy (tr² B β) (tr² B α)))
-      ( tr²-concat-right-whisker-left-whisker-concat α β)
-  tr³-commutative-left-whisker-right-whisker-concat-Ω² {q = refl} refl {p = refl} refl =
-    refl-htpy
+      ( tr²-concat-left-whisker-right-whisker-concat-Ω² α β)
+      ( tr³ B (commutative-left-whisker-right-whisker-concat α β))
+      ( commutative-right-whisker-left-whisker-htpy (tr² B α) (tr² B β))
+      ( tr²-concat-right-whisker-left-whisker-concat-Ω² β α)
+  tr³-commutative-left-whisker-right-whisker-concat-Ω² α β =
+    horizontal-pasting-coherence-square-homotopies
+      ( inv-htpy right-unit-htpy)
+      ( tr²-concat-left-whisker-right-whisker-concat α β)
+      ( tr³ B (commutative-left-whisker-right-whisker-concat α β))
+      ( right-whisker-concat-htpy (tr³ B (commutative-left-whisker-right-whisker-concat α β)) refl-htpy)
+      ( commutative-right-whisker-left-whisker-htpy (tr² B α) (tr² B β))
+      ( inv-htpy right-unit-htpy)
+      ( tr²-concat-right-whisker-left-whisker-concat β α)
+      ( horizontal-inv-coherence-square-homotopies
+        ( right-unit-htpy)
+        ( right-whisker-concat-htpy (tr³ B (commutative-left-whisker-right-whisker-concat α β)) refl-htpy)
+        ( tr³ B (commutative-left-whisker-right-whisker-concat α β))
+        ( right-unit-htpy)
+        ( inv-htpy (right-unit-law-right-whisker-concat-htpy (tr³ B (commutative-left-whisker-right-whisker-concat α β)))))
+     ( concat-right-homotopy-coherence-square-homotopies
+       ( tr²-concat-left-whisker-right-whisker-concat α β)
+       ( right-whisker-concat-htpy
+         ( tr³ B (commutative-left-whisker-right-whisker-concat α β))
+         ( refl-htpy))
+       ( left-whisker-concat-htpy
+         ( refl-htpy)
+         ( commutative-right-whisker-left-whisker-htpy
+           (tr² B α)
+           (tr² B β)))
+       ( tr²-concat-right-whisker-left-whisker-concat β α)
+       ( left-unit-law-left-whisker-comp
+         ( commutative-right-whisker-left-whisker-htpy
+           ( tr² B α)
+           ( tr² B β)))
+       ( tr³-commutative-left-whisker-right-whisker-concat α β)) 
 ```

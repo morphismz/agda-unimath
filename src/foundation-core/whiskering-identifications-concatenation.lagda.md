@@ -218,9 +218,8 @@ module _
 
   compute-inv-commutative-left-whisker-right-whisker-concat :
     (β : q ＝ q') (α : p ＝ p') →
-    ( ( commutative-left-whisker-right-whisker-concat β α) ∙
-    ( commutative-right-whisker-left-whisker-concat α β)) ＝
-    ( refl)
+    ( inv (commutative-right-whisker-left-whisker-concat α β)) ＝
+    ( commutative-left-whisker-right-whisker-concat β α)
   compute-inv-commutative-left-whisker-right-whisker-concat refl refl =
     refl
 ```
