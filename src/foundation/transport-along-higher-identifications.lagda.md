@@ -179,9 +179,12 @@ module _
 
 ```agda
   tr³-left-unit-law-left-whisker-concat :
-     {x y : A} {q q' : x ＝ y} (β : q ＝ q') →
-    ( tr³ B (left-unit-law-left-whisker-concat β)) ~
-    ( ( inv-htpy right-unit-htpy) ∙h (tr²-left-whisker refl β))
+    {x y : A} {q q' : x ＝ y} (β : q ＝ q') →
+    coherence-square-homotopies
+      ( inv-htpy right-unit-htpy)
+      ( refl-htpy)
+      ( tr²-left-whisker refl β)
+      ( tr³ B (left-unit-law-left-whisker-concat β))
   tr³-left-unit-law-left-whisker-concat refl = refl-htpy
 
   tr³-right-unit-law-right-whisker-concat :
@@ -356,21 +359,39 @@ module _
   {l1 l2 : Level} {A : UU l1} {a : A}
   {B : A → UU l2}
   where
-      
+
+  tr²-right-whisker-concat-tr²-left-whisker-concat-Ω² :
+    (α β : refl {x = a} ＝ refl) →
+    coherence-square-homotopies
+      ( refl-htpy)
+      ( inv-htpy right-unit-htpy)
+      ( horizontal-concat-htpy² 
+      ( ( tr³ B (inv (right-unit-law-right-whisker-concat α ∙ right-unit))) ∙h
+      ( inv-htpy (left-unit-law-left-whisker-comp (tr² B α))))
+      ( tr³ B (left-unit-law-left-whisker-concat β)))
+      ( tr²-right-whisker-concat-tr²-left-whisker-concat α β)
+  tr²-right-whisker-concat-tr²-left-whisker-concat-Ω² =
+    {!vertical-pasting-inv-coherence-square-homotopies-horizontal-refl
+       !} --- SHIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+
+
   tr²-concat-right-whisker-left-whisker-concat-Ω² :
     (α β : refl {x = a} ＝ refl) →
     (tr² B ((right-whisker-concat α refl) ∙ (left-whisker-concat refl β))) ~
     (((tr B refl) ·l (tr² B α)) ∙h ((tr² B β) ·r (tr B refl)))
   tr²-concat-right-whisker-left-whisker-concat-Ω² α β =
-    inv-htpy right-unit-htpy ∙h tr²-concat-right-whisker-left-whisker-concat α β
+    ( tr²-concat (right-whisker-concat α refl) (left-whisker-concat refl β)) ∙h
+    ( ( inv-htpy right-unit-htpy) ∙h
+    ( tr²-right-whisker-concat-tr²-left-whisker-concat α β))
 
   tr²-concat-left-whisker-right-whisker-concat-Ω² :
     (α β : refl {x = a} ＝ refl) →
     (tr² B ((left-whisker-concat refl α) ∙ (right-whisker-concat β refl))) ~
     (((tr² B α) ·r (tr B refl)) ∙h ((tr B refl) ·l (tr² B β)))
   tr²-concat-left-whisker-right-whisker-concat-Ω² α β =
-    ( inv-htpy right-unit-htpy) ∙h
-    ( tr²-concat-left-whisker-right-whisker-concat α β)
+    ( tr²-concat (left-whisker-concat refl α) (right-whisker-concat β refl)) ∙h
+    ( ( inv-htpy right-unit-htpy) ∙h
+    ( tr²-left-whisker-concat-tr²-right-whisker-concat α β))
 ```
 
 ##### The cube
@@ -451,7 +472,7 @@ module _
 
 The above coherence can be simplified when `α` and `β` are 2-loops
 
-```agda
+
 module _
   {l1 l2 : Level} {A : UU l1} {a : A}
   {B : A → UU l2}
@@ -495,7 +516,7 @@ module _
            ( tr² B α)
            ( tr² B β)))
        ( tr³-commutative-left-whisker-right-whisker-concat α β)) 
-```
+
 
 Some coherences between these coherences
 
