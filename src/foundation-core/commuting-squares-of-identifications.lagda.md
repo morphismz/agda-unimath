@@ -133,27 +133,49 @@ It also induces a square
 
 ```agda
 module _
-  {l : Level} {A : UU l} {a b : A} (p q : a ＝ b) (α : p ＝ q)
+  {l : Level} {A : UU l} {a b : A} (p q : a ＝ b)
   where
 
   coherence-square-identifications-horizontal-refl :
+    p ＝ q → 
     coherence-square-identifications
       ( refl)
       ( p)
       ( q)
       ( refl)
-  coherence-square-identifications-horizontal-refl =
+  coherence-square-identifications-horizontal-refl α =
     right-unit ∙ α
+
+  inv-coherence-square-identifications-horizontal-refl :
+    (coherence-square-identifications
+      ( refl)
+      ( p)
+      ( q)
+      ( refl)) →
+    p ＝ q      
+  inv-coherence-square-identifications-horizontal-refl α =
+    inv right-unit ∙ α
 
 
   coherence-square-identifications-vertical-refl :
+    p ＝ q → 
     coherence-square-identifications
       ( q)
       ( refl)
       ( refl)
       ( p)
-  coherence-square-identifications-vertical-refl =
+  coherence-square-identifications-vertical-refl α =
     α ∙ inv right-unit
+
+  inv-coherence-square-identifications-vertical-refl :
+    (coherence-square-identifications
+      ( q)
+      ( refl)
+      ( refl)
+      ( p)) →
+    p ＝ q
+  inv-coherence-square-identifications-vertical-refl α =
+    α ∙ right-unit
 ```
 
 ## Operations

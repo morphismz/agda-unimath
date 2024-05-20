@@ -126,17 +126,29 @@ Given a homotopy `H ~ H'`, we can obtain a commutative square with
 ```agda
 module _
   {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g : (x : A) → B x}
-  (H H' : f ~ g) (K : H ~ H')
+  (H H' : f ~ g)
   where
 
   coherence-square-homotopies-horizontal-refl :
+    H ~ H' →
     coherence-square-homotopies
       ( refl-htpy)
       ( H)
       ( H')
       ( refl-htpy)
-  coherence-square-homotopies-horizontal-refl =
+  coherence-square-homotopies-horizontal-refl K =
     right-unit-htpy ∙h K
+
+  inv-coherence-square-homotopies-horizontal-refl :
+    ( coherence-square-homotopies
+      ( refl-htpy)
+      ( H)
+      ( H')
+      ( refl-htpy)) →
+    ( H ~ H')
+  inv-coherence-square-homotopies-horizontal-refl K =
+    inv-htpy right-unit-htpy ∙h K
+    
 ```
 
 Given a homotopy `H ~ H'`, we can obtain a commutative square with
@@ -155,17 +167,28 @@ refl-htpy |         | refl-htpy
 ```agda
 module _
   {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g : (x : A) → B x}
-  (H H' : f ~ g) (K : H ~ H')
+  (H H' : f ~ g)
   where
 
   coherence-square-homotopies-vertical-refl :
+    H ~ H' →
     coherence-square-homotopies
       ( H')
       ( refl-htpy)
       ( refl-htpy)
       ( H)
-  coherence-square-homotopies-vertical-refl =
+  coherence-square-homotopies-vertical-refl K =
     K ∙h inv-htpy right-unit-htpy
+
+  inv-coherence-square-homotopies-vertical-refl :
+    ( coherence-square-homotopies
+      ( H')
+      ( refl-htpy)
+      ( refl-htpy)
+      ( H)) →
+    ( H ~ H')
+  inv-coherence-square-homotopies-vertical-refl K =
+    K ∙h right-unit-htpy  
 ```
 
 

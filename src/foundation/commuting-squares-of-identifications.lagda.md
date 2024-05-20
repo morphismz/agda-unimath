@@ -618,4 +618,28 @@ module _
   vertical-pasting-coherence-square-identifications-horizontal-refl
     refl refl refl refl refl refl =
       refl
+
+  vertical-pasting-inv-coherence-square-identifications-horizontal-refl :
+    (top-left : a ＝ b) (top-right : a ＝ b)
+    (bottom-left : b ＝ c) (bottom-right : b ＝ c)
+    (α : coherence-square-identifications refl top-left top-right refl)
+    (β : coherence-square-identifications refl bottom-left bottom-right refl) →
+    (inv right-unit) ∙
+    ( vertical-pasting-coherence-square-identifications
+      ( refl)
+      ( top-left)
+      ( top-right)
+      ( refl)
+      ( bottom-left)
+      ( bottom-right)
+      ( refl)
+      ( α)
+      ( β)) ＝
+      ( horizontal-concat-Id²
+        ( inv-coherence-square-identifications-horizontal-refl top-left top-right α)
+        ( inv-coherence-square-identifications-horizontal-refl bottom-left bottom-right β))
+  vertical-pasting-inv-coherence-square-identifications-horizontal-refl
+    refl refl refl refl refl refl =
+      refl
+
 ```

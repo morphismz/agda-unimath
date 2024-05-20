@@ -657,4 +657,32 @@ module _
       ( bottom-right x)
       ( H x)
       ( K x)
+
+  vertical-pasting-inv-coherence-square-homotopies-horizontal-refl :
+    (H : coherence-square-homotopies refl-htpy top-left top-right refl-htpy)
+    (K : coherence-square-homotopies refl-htpy bottom-left bottom-right refl-htpy) →
+    (inv-htpy right-unit-htpy) ∙h
+    ( vertical-pasting-coherence-square-homotopies
+      ( refl-htpy)
+      ( top-left)
+      ( top-right)
+      ( refl-htpy)
+      ( bottom-left)
+      ( bottom-right)
+      ( refl-htpy)
+      ( H)
+      ( K)) ~
+    ( horizontal-concat-htpy²
+      ( inv-coherence-square-homotopies-horizontal-refl top-left top-right H)
+      ( inv-coherence-square-homotopies-horizontal-refl bottom-left bottom-right K) )
+  vertical-pasting-inv-coherence-square-homotopies-horizontal-refl H K x =
+    vertical-pasting-inv-coherence-square-identifications-horizontal-refl
+      ( top-left x)
+      ( top-right x)
+      ( bottom-left x)
+      ( bottom-right x)
+      ( H x)
+      ( K x)
 ```
+
+ToDo same for horizontal
