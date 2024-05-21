@@ -136,7 +136,7 @@ module _
 
 ```agda
 module _
-  { l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g h : (a : A) → B a}
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g h : (a : A) → B a}
   where
 
   horizontal-concat-htpy² :
@@ -144,6 +144,21 @@ module _
     { K K' : g ~ h} → K ~ K' →
     ( H ∙h K) ~ (H' ∙h K')
   horizontal-concat-htpy² α β x = horizontal-concat-Id² (α x) (β x)
+```
+
+### Three dimensional concatination of homotopies
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g h : (a : A) → B a}
+  where
+
+  z-concat-htpy³ :
+    {H K : f ~ g} {L M : g ~ h} {α β : H ~ K} {δ ε : L ~ M}
+    (γ : α ~ β) (η : δ ~ ε) →
+    horizontal-concat-htpy² α δ ~ horizontal-concat-htpy² β ε
+  z-concat-htpy³ γ η x = z-concat-Id³ (γ x) (η x)
+
 ```
 
 ### Transposing homotopies is an equivalence

@@ -129,5 +129,4 @@ eckmann-hilton-htpy H K =
     ( left-whisker-concat-htpy H (left-unit-law-left-whisker-comp K))) ∙h
   ( commutative-right-whisker-left-whisker-htpy H K) ∙h
   ( right-whisker-concat-htpy (left-unit-law-left-whisker-comp K) H)
-
 ```
