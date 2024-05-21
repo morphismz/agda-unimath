@@ -269,6 +269,20 @@ module _
       ( ap-id α))
 ```
 
+### Vertical inverses distribute over horizontal concatenation
+
+```agda
+module _
+  {l : Level} {A : UU l} {x y z : A} {p q : x ＝ y} {u v : y ＝ z}
+  where
+
+  distributive-inv-horizontal-concat-Id² :
+    (α : p ＝ q) (β : u ＝ v) →
+    inv (horizontal-concat-Id² α β) ＝ horizontal-concat-Id² (inv α) (inv β)
+  distributive-inv-horizontal-concat-Id² refl refl =
+    refl
+```
+
 ### Interchange laws for 2-paths
 
 ```agda

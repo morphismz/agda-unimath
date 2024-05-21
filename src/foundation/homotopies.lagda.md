@@ -27,6 +27,7 @@ open import foundation-core.equivalences
 open import foundation-core.function-types
 open import foundation-core.functoriality-dependent-function-types
 open import foundation-core.transport-along-identifications
+open import foundation-core.whiskering-homotopies-concatenation
 open import foundation-core.whiskering-identifications-concatenation
 ```
 
@@ -144,6 +145,40 @@ module _
     { K K' : g ~ h} → K ~ K' →
     ( H ∙h K) ~ (H' ∙h K')
   horizontal-concat-htpy² α β x = horizontal-concat-Id² (α x) (β x)
+```
+
+### Unit laws for horizontal concatination of homotopies
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g h : (a : A) → B a}
+    { H H' : f ~ g} {K : g ~ h} (α : H ~ H' )
+  where
+
+  compute-right-refl-htpy-horizontal-concat-htpy² :
+    {K : g ~ h} → horizontal-concat-htpy² α refl-htpy ~ right-whisker-concat-htpy α K
+  compute-right-refl-htpy-horizontal-concat-htpy² x =
+    compute-right-refl-horizontal-concat-Id² (α x) 
+
+  compute-left-refl-htpy-horizontal-concat-htpy² :
+    {K : h ~ f} → horizontal-concat-htpy² refl-htpy α ~ left-whisker-concat-htpy K α
+  compute-left-refl-htpy-horizontal-concat-htpy² x =
+    compute-left-refl-horizontal-concat-Id² (α x)
+```
+
+### The interchange law for horizontal composition of homotopies
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g h : (a : A) → B a}
+  {H H' H'' : f ~ g} (α : H ~ H') (α' : H' ~ H'') { K K' K'' : g ~ h} (β : K ~ K') (β' : K' ~ K'')
+  where
+
+  interchange-htpy² :
+    horizontal-concat-htpy² (α ∙h α') (β ∙h β') ~
+    (horizontal-concat-htpy² α β) ∙h (horizontal-concat-htpy² α' β')
+  interchange-htpy² x = interchange-Id² (α x) (α' x) (β x) (β' x)
+
 ```
 
 ### Three dimensional concatination of homotopies

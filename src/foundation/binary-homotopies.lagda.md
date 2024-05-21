@@ -7,6 +7,7 @@ module foundation.binary-homotopies where
 <details><summary>Imports</summary>
 
 ```agda
+open import foundation.action-on-identifications-binary-functions
 open import foundation.dependent-pair-types
 open import foundation.equality-dependent-function-types
 open import foundation.function-extensionality
@@ -14,6 +15,7 @@ open import foundation.fundamental-theorem-of-identity-types
 open import foundation.homotopy-induction
 open import foundation.universe-levels
 
+open import foundation-core.commuting-squares-of-identifications
 open import foundation-core.equivalences
 open import foundation-core.homotopies
 open import foundation-core.identity-types
@@ -95,4 +97,22 @@ module _
   equiv-htpy-binary-htpy :
     (f g : (x : A) (y : B x) → C x y) → binary-htpy f g ≃ (f ~ g)
   equiv-htpy-binary-htpy f g = inv-equiv (equiv-binary-htpy-htpy f g)
+```
+
+### The naturality condition of a binary homotopy between ordinary functions
+
+```agda
+module _
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3} {f g : A → B → C}
+  {a a' : A} {b b' : B}
+  where
+  
+  nat-binary-htpy :
+    (H : binary-htpy f g) (p : a ＝ a') (q : b ＝ b') →
+    coherence-square-identifications
+      ( ap-binary f p q)
+      ( H a b)
+      ( H a' b')
+      ( ap-binary g p q)
+  nat-binary-htpy H refl refl = right-unit
 ```
