@@ -152,18 +152,34 @@ module _
 ```agda
 module _
   {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g h : (a : A) → B a}
-    { H H' : f ~ g} {K : g ~ h} (α : H ~ H' )
+    {H H' : f ~ g}
   where
 
   compute-right-refl-htpy-horizontal-concat-htpy² :
-    {K : g ~ h} → horizontal-concat-htpy² α refl-htpy ~ right-whisker-concat-htpy α K
-  compute-right-refl-htpy-horizontal-concat-htpy² x =
+    (α : H ~ H' ) (K : g ~ h) → horizontal-concat-htpy² α refl-htpy ~ right-whisker-concat-htpy α K
+  compute-right-refl-htpy-horizontal-concat-htpy² α K x =
     compute-right-refl-horizontal-concat-Id² (α x) 
 
   compute-left-refl-htpy-horizontal-concat-htpy² :
-    {K : h ~ f} → horizontal-concat-htpy² refl-htpy α ~ left-whisker-concat-htpy K α
-  compute-left-refl-htpy-horizontal-concat-htpy² x =
+    (K : h ~ f) (α : H ~ H') → horizontal-concat-htpy² refl-htpy α ~ left-whisker-concat-htpy K α
+  compute-left-refl-htpy-horizontal-concat-htpy² K α x =
     compute-left-refl-horizontal-concat-Id² (α x)
+```
+
+### Vertical inverses distribute over horizontal concatination
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g h : (a : A) → B a}
+  {H H' : f ~ g} {K K' : g ~ h}
+  where
+
+  distributive-inv-horizontal-concat-htpy² :
+    (α : H ~ H') (β : K ~ K) →
+    inv-htpy (horizontal-concat-htpy² α β) ~
+    horizontal-concat-htpy² (inv-htpy α) (inv-htpy β)
+  distributive-inv-horizontal-concat-htpy² α β x =
+    distributive-inv-horizontal-concat-Id² (α x) (β x)
 ```
 
 ### The interchange law for horizontal composition of homotopies
@@ -178,7 +194,6 @@ module _
     horizontal-concat-htpy² (α ∙h α') (β ∙h β') ~
     (horizontal-concat-htpy² α β) ∙h (horizontal-concat-htpy² α' β')
   interchange-htpy² x = interchange-Id² (α x) (α' x) (β x) (β' x)
-
 ```
 
 ### Three dimensional concatination of homotopies

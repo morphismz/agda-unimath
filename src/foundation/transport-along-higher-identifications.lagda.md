@@ -86,6 +86,20 @@ module _
     {p p' : x ＝ y} (α : p ＝ p') →
     tr² B (inv α) ~ inv-htpy (tr² B α)
   tr²-inv α b = ap-inv (λ t → tr B t b) α
+
+  tr²-left-inv :
+    {p p' : x ＝ y} (α : p ＝ p') →
+    tr² B (inv α) ∙h tr² B α ~ refl-htpy
+  tr²-left-inv α =
+    ( right-whisker-concat-htpy (tr²-inv α) (tr² B α)) ∙h
+    ( left-inv-htpy (tr² B α))
+
+  tr²-right-inv :
+    {p p' : x ＝ y} (α : p ＝ p') →
+    tr² B α ∙h tr² B (inv α) ~ refl-htpy
+  tr²-right-inv α =
+    ( left-whisker-concat-htpy (tr² B α) (tr²-inv α)) ∙h
+    ( right-inv-htpy (tr² B α))
 ```
 
 #### Computing `tr²` along a concatination of paths
@@ -153,6 +167,20 @@ module _
     {x y : A} {p p' : x ＝ y} {α α' : p ＝ p'} (γ : α ＝ α') →
     tr³ B (inv γ) ~ inv-htpy (tr³ B γ)
   tr³-inv γ b = ap-inv (λ t → tr² B t b) γ
+
+  tr³-left-inv :
+    {x y : A} {p p' : x ＝ y} {α α' : p ＝ p'} (γ : α ＝ α') →
+    tr³ B (inv γ) ∙h tr³ B γ ~ refl-htpy
+  tr³-left-inv γ =
+    ( right-whisker-concat-htpy (tr³-inv γ) (tr³ B γ)) ∙h
+    ( left-inv-htpy (tr³ B γ))
+
+  tr³-right-inv :
+    {x y : A} {p p' : x ＝ y} {α α' : p ＝ p'} (γ : α ＝ α') →
+    tr³ B γ ∙h tr³ B (inv γ) ~ refl-htpy
+  tr³-right-inv γ =
+    ( left-whisker-concat-htpy (tr³ B γ) (tr³-inv γ)) ∙h
+    ( right-inv-htpy (tr³ B γ))
 
 ```
 

@@ -131,3 +131,29 @@ module _
   right-unit-law-right-whisker-concat-htpy K x =
     right-unit-law-right-whisker-concat (K x)
 ```
+
+### Left whiskering of homotopies commutes with inverses of homotopies
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : A → UU l2} {f g h : (x : A) → B x}
+  {I J : f ~ g}
+  where
+
+  compute-inv-left-whisker-concat-htpy :
+    (H : h ~ f) (K : I ~ J) →
+    left-whisker-concat-htpy H (inv-htpy K) ~
+    inv-htpy (left-whisker-concat-htpy H K)
+  compute-inv-left-whisker-concat-htpy H K x =
+    compute-inv-left-whisker-concat (H x) (K x)
+```
+
+### Right whiskering of homotopies commutes with inverses of homotopies
+
+```agda
+  compute-inv-right-whisker-concat-htpy :
+    (K : I ~ J) (H : g ~ h) →
+    right-whisker-concat-htpy (inv-htpy K) H ~
+    inv-htpy (right-whisker-concat-htpy K H)
+  compute-inv-right-whisker-concat-htpy K H x =
+    compute-inv-right-whisker-concat (K x) (H x)
