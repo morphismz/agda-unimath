@@ -456,8 +456,6 @@ module _
       ( inv-htpy (tr³-left-unit-law-left-whisker-concat-Ω² α))
       ( inv-htpy (tr³-right-unit-law-right-whisker-concat-Ω² β)))
 
--- delete these last two ???
-
   tr²-concat-right-whisker-left-whisker-concat-Ω² :
     (α β : refl {x = a} ＝ refl) →
     (tr² B ((right-whisker-concat α refl) ∙ (left-whisker-concat refl β))) ~
