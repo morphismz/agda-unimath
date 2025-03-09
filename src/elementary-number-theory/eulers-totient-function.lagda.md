@@ -19,7 +19,8 @@ open import univalent-combinatorics.standard-finite-types
 
 ## Idea
 
-**Euler's totient function** `φ : ℕ → ℕ` is the function that maps a
+{{#concept "Euler's totient function" WD="Euler's totient function" WDID=Q190026 Agda=eulers-totient-function-relatively-prime}}
+`φ : ℕ → ℕ` is the function that maps a
 [natural number](elementary-number-theory.natural-numbers.md) `n` to the number
 of
 [multiplicative units modulo `n`](elementary-number-theory.multiplicative-units-standard-cyclic-rings.md).
@@ -47,8 +48,8 @@ extend naturally to the first definition.
 ```agda
 eulers-totient-function-relatively-prime : ℕ → ℕ
 eulers-totient-function-relatively-prime n =
-  number-of-elements-subset-𝔽
-    ( Fin-𝔽 n)
+  number-of-elements-subset-Finite-Type
+    ( Fin-Finite-Type n)
     ( λ x → is-relatively-prime-ℕ-Decidable-Prop (nat-Fin n x) n)
 ```
 
@@ -57,3 +58,10 @@ eulers-totient-function-relatively-prime n =
 ### Table of files related to cyclic types, groups, and rings
 
 {{#include tables/cyclic-types.md}}
+
+## External links
+
+- [Euler's totient function](https://en.wikipedia.org/wiki/Euler%27s_totient_function)
+  at Wikipedia
+- [Totient Function](https://mathworld.wolfram.com/TotientFunction.html) at
+  Wolfram MathWorld

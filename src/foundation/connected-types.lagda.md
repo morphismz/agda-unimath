@@ -38,16 +38,38 @@ A type is said to be **`k`-connected** if its `k`-truncation is contractible.
 
 ## Definition
 
+### The predicate of being a `k`-connected type
+
 ```agda
-is-connected-Prop : {l : Level} (k : 𝕋) → UU l → Prop l
-is-connected-Prop k A = is-contr-Prop (type-trunc k A)
+module _
+  {l : Level} (k : 𝕋) (A : UU l)
+  where
 
-is-connected : {l : Level} (k : 𝕋) → UU l → UU l
-is-connected k A = type-Prop (is-connected-Prop k A)
+  is-connected-Prop : Prop l
+  is-connected-Prop = is-contr-Prop (type-trunc k A)
 
-is-prop-is-connected :
-  {l : Level} (k : 𝕋) (A : UU l) → is-prop (is-connected k A)
-is-prop-is-connected k A = is-prop-type-Prop (is-connected-Prop k A)
+  is-connected : UU l
+  is-connected = type-Prop is-connected-Prop
+
+  is-prop-is-connected : is-prop is-connected
+  is-prop-is-connected = is-prop-type-Prop is-connected-Prop
+```
+
+### The type of `k`-connected types
+
+```agda
+Connected-Type : (l : Level) (k : 𝕋) → UU (lsuc l)
+Connected-Type l k = Σ (UU l) (is-connected k)
+
+module _
+  {l : Level} {k : 𝕋} (A : Connected-Type l k)
+  where
+
+  type-Connected-Type : UU l
+  type-Connected-Type = pr1 A
+
+  is-connected-Connected-Type : is-connected k type-Connected-Type
+  is-connected-Connected-Type = pr2 A
 ```
 
 ## Properties
@@ -220,6 +242,6 @@ module _
     A retract-of B →
     is-connected k B →
     is-connected k A
-  is-connected-retract-of R c =
-    is-contr-retract-of (type-trunc k B) (retract-of-trunc-retract-of R) c
+  is-connected-retract-of R =
+    is-contr-retract-of (type-trunc k B) (retract-of-trunc-retract-of R)
 ```

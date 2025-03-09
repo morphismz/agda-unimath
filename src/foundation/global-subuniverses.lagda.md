@@ -64,8 +64,12 @@ record global-subuniverse (α : Level → Level) : UUω where
       (l : Level) → subuniverse l (α l)
 
     is-closed-under-equiv-global-subuniverse :
-      (l1 l2 : Level) →
+      {l1 l2 : Level} →
       is-closed-under-equiv-subuniverses α subuniverse-global-subuniverse l1 l2
+
+  is-in-global-subuniverse-Prop : {l : Level} → UU l → Prop (α l)
+  is-in-global-subuniverse-Prop {l} X =
+    subuniverse-global-subuniverse l X
 
   is-in-global-subuniverse : {l : Level} → UU l → UU (α l)
   is-in-global-subuniverse {l} X =
@@ -84,6 +88,12 @@ record global-subuniverse (α : Level → Level) : UUω where
     {l : Level} → type-global-subuniverse l → UU l
   inclusion-global-subuniverse {l} =
     inclusion-subuniverse (subuniverse-global-subuniverse l)
+
+  is-in-global-subuniverse-inclusion-global-subuniverse :
+    {l : Level} (X : type-global-subuniverse l) →
+    is-in-global-subuniverse (inclusion-global-subuniverse X)
+  is-in-global-subuniverse-inclusion-global-subuniverse {l} =
+    is-in-subuniverse-inclusion-subuniverse (subuniverse-global-subuniverse l)
 
 open global-subuniverse public
 ```
@@ -116,7 +126,7 @@ module _
 
 ## Properties
 
-### Global subuniverses are closed under homogenous equivalences
+### Global subuniverses are closed under equivalences between types in a single universe
 
 This is true for any family of subuniverses indexed by universe levels.
 
@@ -126,14 +136,14 @@ module _
   {l : Level} {X Y : UU l}
   where
 
-  is-in-global-subuniverse-homogenous-equiv :
+  is-in-global-subuniverse-equiv-Level :
     X ≃ Y → is-in-global-subuniverse P X → is-in-global-subuniverse P Y
-  is-in-global-subuniverse-homogenous-equiv =
+  is-in-global-subuniverse-equiv-Level =
     is-in-subuniverse-equiv (subuniverse-global-subuniverse P l)
 
-  is-in-global-subuniverse-homogenous-equiv' :
+  is-in-global-subuniverse-equiv-Level' :
     X ≃ Y → is-in-global-subuniverse P Y → is-in-global-subuniverse P X
-  is-in-global-subuniverse-homogenous-equiv' =
+  is-in-global-subuniverse-equiv-Level' =
     is-in-subuniverse-equiv' (subuniverse-global-subuniverse P l)
 ```
 

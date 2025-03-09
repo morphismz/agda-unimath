@@ -35,7 +35,7 @@ binary-lower bound. Alternatively, meet-semilattices can be defined
 algebraically as a set `X` equipped with a binary operation `∧ : X → X → X`
 satisfying
 
-1. Asociativity: `(x ∧ y) ∧ z ＝ x ∧ (y ∧ z)`,
+1. Associativity: `(x ∧ y) ∧ z ＝ x ∧ (y ∧ z)`,
 2. Commutativity: `x ∧ y ＝ y ∧ x`,
 3. Idempotency: `x ∧ x ＝ x`.
 
@@ -317,7 +317,7 @@ module _
   leq-Order-Theoretic-Meet-Semilattice-Prop :
     (x y : type-Order-Theoretic-Meet-Semilattice) → Prop l2
   leq-Order-Theoretic-Meet-Semilattice-Prop =
-    leq-Poset-Prop poset-Order-Theoretic-Meet-Semilattice
+    leq-prop-Poset poset-Order-Theoretic-Meet-Semilattice
 
   leq-Order-Theoretic-Meet-Semilattice :
     (x y : type-Order-Theoretic-Meet-Semilattice) → UU l2

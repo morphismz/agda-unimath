@@ -15,6 +15,7 @@ open import foundation.functoriality-fibers-of-maps
 open import foundation.identity-types
 open import foundation.morphisms-arrows
 open import foundation.standard-pullbacks
+open import foundation.type-arithmetic-standard-pullbacks
 open import foundation.universe-levels
 
 open import foundation-core.commuting-triangles-of-maps
@@ -196,6 +197,14 @@ module _
   is-pullback-standard-pullback = is-equiv-id
 ```
 
+### The identity cone is a pullback
+
+```agda
+is-pullback-id-cone : {l : Level} (A : UU l) → is-pullback id id (id-cone A)
+is-pullback-id-cone A =
+  is-equiv-is-invertible pr1 (λ where (x , .x , refl) → refl) refl-htpy
+```
+
 ### Pullbacks are preserved under homotopies of parallel cones
 
 ```agda
@@ -208,7 +217,7 @@ module _
     {c : cone f g C} {c' : cone f' g' C} (Hc : htpy-parallel-cone Hf Hg c c') →
     gap f g c ~ map-equiv-standard-pullback-htpy Hf Hg ∘ gap f' g' c'
   triangle-is-pullback-htpy {p , q , H} {p' , q' , H'} (Hp , Hq , HH) z =
-    map-extensionality-standard-pullback f g
+    eq-Eq-standard-pullback f g
       ( Hp z)
       ( Hq z)
       ( ( inv (assoc (ap f (Hp z)) (Hf (p' z) ∙ H' z) (inv (Hg (q' z))))) ∙
