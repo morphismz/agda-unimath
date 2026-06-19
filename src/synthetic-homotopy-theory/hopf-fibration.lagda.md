@@ -22,6 +22,9 @@ open import foundation.whiskering-homotopies-concatenation
 open import foundation.whiskering-identifications-concatenation
 open import foundation.equivalences
 open import foundation.function-types
+open import foundation.families-of-equivalences
+
+open import foundation-core.contractible-types
 
 open import structured-types.pointed-equivalences
 open import structured-types.pointed-types
@@ -85,9 +88,9 @@ module _
     {l1 : Level} → (X : hopf-fibration-algebra l1) → id {A = type-hopf-fibration-algebra X} ~ id
   two-automorphism-hopf-fibration-algebra = pr1 ∘ pr2 ∘ pr2
   
-  hopf-fibration-algebra-morphism :
+  hopf-fibration-algebra-map :
     {l1 l2 : Level} (X : hopf-fibration-algebra l1) (Y : hopf-fibration-algebra l2) → UU (l1 ⊔ l2)
-  hopf-fibration-algebra-morphism X Y =
+  hopf-fibration-algebra-map X Y =
     Σ (type-hopf-fibration-algebra X → type-hopf-fibration-algebra Y)
       λ f →
         Σ (f (point-hopf-fibration-algebra X) ＝ point-hopf-fibration-algebra Y)
@@ -96,6 +99,34 @@ module _
               λ H →
                 {!!}
 
+  Eq-hopf-fibration-algebra-map :
+    {l1 l2 : Level} {X : hopf-fibration-algebra l1} {Y : hopf-fibration-algebra l2}
+    (f f' : hopf-fibration-algebra-map X Y) → UU (l1 ⊔ l2)
+  Eq-hopf-fibration-algebra-map = {!!}
+
+  compute-fiber-algebra-hopf-fibration :
+    {l : Level} → hopf-fibration-algebra l ≃ fiber-algebra l hopf-fibration
+  compute-fiber-algebra-hopf-fibration = {!!}
+
+  inv-equiv-compute-fiber-algebra-hopf-fibration-type :
+    {l : Level} → (X : fiber-algebra l hopf-fibration) →
+    type-hopf-fibration-algebra (map-inv-equiv compute-fiber-algebra-hopf-fibration X) ≃
+    family-fiber-algebra X base-𝕊²
+  inv-equiv-compute-fiber-algebra-hopf-fibration-type = {!!}
+
+  compute-fiber-algebra-map-hopf-fibration :
+    (X Y : hopf-fibration-algebra lzero) →
+    hopf-fibration-algebra-map X Y ≃
+    fiber-algebra-map
+      ( map-equiv compute-fiber-algebra-hopf-fibration X)
+      ( map-equiv compute-fiber-algebra-hopf-fibration Y)
+  compute-fiber-algebra-map-hopf-fibration = {!!}
+    
+  is-initial-fiber-algebra-is-intial-hopf-fibration-algebra :
+    {l1 : Level} (X : hopf-fibration-algebra l1) →
+    ({l2 : Level} (Y : hopf-fibration-algebra l2) → is-contr (hopf-fibration-algebra-map X Y)) →
+    ({l2 : Level} (Y : fiber-algebra l2 hopf-fibration) → is-contr (fiber-algebra-map (map-equiv compute-fiber-algebra-hopf-fibration X) Y))
+  is-initial-fiber-algebra-is-intial-hopf-fibration-algebra = {!!}
 
   hopf-fibration-algebra-𝕊¹ : hopf-fibration-algebra lzero
   pr1 hopf-fibration-algebra-𝕊¹ = 𝕊¹
@@ -103,15 +134,31 @@ module _
   pr1 (pr2 (pr2 hopf-fibration-algebra-𝕊¹)) = 2-automorphisms-𝕊¹
   pr2 (pr2 (pr2 hopf-fibration-algebra-𝕊¹)) = {!!}
 
-  universal-property-family-of-fibers-of-hopf-fibration : UUω
-  universal-property-family-of-fibers-of-hopf-fibration =
-    {!!}
+  is-initial-hopf-fibration-algebra-𝕊¹ :
+    {l1 : Level} (X : hopf-fibration-algebra l1) →
+    is-contr (hopf-fibration-algebra-map hopf-fibration-algebra-𝕊¹ X)
+  is-initial-hopf-fibration-algebra-𝕊¹ X = {!!}
 
-  something :
-    {l1 : Level} (P : 𝕊² → UU l1) → {!!} ≃ lift-family-of-elements P hopf-fibration
-  something = {!!}
-  
-  compute-fiber-over-base-hopf-fibration : 𝕊¹ ≃ fiber hopf-fibration base-𝕊²
-  compute-fiber-over-base-hopf-fibration = {!!}
+  fiber-algebra-𝕊¹ :
+    fiber-algebra lzero hopf-fibration
+  fiber-algebra-𝕊¹ = map-equiv compute-fiber-algebra-hopf-fibration hopf-fibration-algebra-𝕊¹
+
+  is-initial-fiber-algebra-𝕊¹ :
+    {l1 : Level} (X : fiber-algebra l1 hopf-fibration) →
+    is-contr (fiber-algebra-map fiber-algebra-𝕊¹ X)
+  is-initial-fiber-algebra-𝕊¹ =
+    is-initial-fiber-algebra-is-intial-hopf-fibration-algebra
+      ( hopf-fibration-algebra-𝕊¹)
+      ( is-initial-hopf-fibration-algebra-𝕊¹)
+
+  compute-family-of-fibers-hopf-fibration :
+    fam-equiv
+      (family-fiber-algebra (map-equiv compute-fiber-algebra-hopf-fibration hopf-fibration-algebra-𝕊¹))
+      (fiber hopf-fibration)
+  compute-family-of-fibers-hopf-fibration = {!!}
+
+  compute-fiber-base-hopf-fibration :
+    𝕊¹ ≃ fiber hopf-fibration base-𝕊²
+  compute-fiber-base-hopf-fibration = {!!}
 ```
 

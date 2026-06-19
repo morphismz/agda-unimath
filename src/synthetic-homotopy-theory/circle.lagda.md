@@ -667,31 +667,34 @@ module _
       (λ p →
         compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p)
 
-  inv-equiv-compute-homotopy-𝕊¹ :
-    inv-equiv compute-homotopy-𝕊¹ ＝
-    ( equiv-tot
-      (λ p →
-        inv-equiv (compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))) ∘e
-    ( equiv-dependent-universal-property-𝕊¹ (eq-value f g))
-  inv-equiv-compute-homotopy-𝕊¹ =
-    ( distributive-inv-comp-equiv
-      ( equiv-tot
-        (λ p →
-          compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))
-      ( inv-equiv (equiv-dependent-universal-property-𝕊¹ (eq-value f g)))) ∙
-    ap
-      (_∘e_
-        ( inv-equiv
-          ( equiv-tot
-            (λ p →
-              compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))))
-      ( inv-inv-equiv (equiv-dependent-universal-property-𝕊¹ (eq-value f g))) ∙
-    {!compute-inv-equiv-tot!}
+  -- inv-equiv-compute-homotopy-𝕊¹ :
+  --   inv-equiv compute-homotopy-𝕊¹ ＝
+  --   ( equiv-tot
+  --     (λ p →
+  --       inv-equiv (compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))) ∘e
+  --   ( equiv-dependent-universal-property-𝕊¹ (eq-value f g))
+  -- inv-equiv-compute-homotopy-𝕊¹ =
+  --   ( distributive-inv-comp-equiv
+  --     ( equiv-tot
+  --       (λ p →
+  --         compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))
+  --     ( inv-equiv (equiv-dependent-universal-property-𝕊¹ (eq-value f g)))) ∙
+  --   ap
+  --     (_∘e_
+  --       ( inv-equiv
+  --         ( equiv-tot
+  --           (λ p →
+  --             compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))))
+  --     ( inv-inv-equiv (equiv-dependent-universal-property-𝕊¹ (eq-value f g))) ∙
+  --   {!compute-inv-equiv-tot!}
         --  nat-htpy-apd-htpy
-  base-homotopy-𝕊¹-htpy :
-    (H : f ~ g) → H base-𝕊¹ ＝ base-homotopy-𝕊¹ (map-inv-equiv compute-homotopy-𝕊¹ H)
-  base-homotopy-𝕊¹-htpy H =
-    inv (htpy-eq (is-section-map-section-map-equiv compute-homotopy-𝕊¹ H) base-𝕊¹) ∙ {!inv-inv-equiv!}
+
+-- ONLY REALLY NEED THESE NEXT TWO, ABOVE IS JUST STEPPING STONE.
+
+  -- base-homotopy-𝕊¹-htpy :
+  --   (H : f ~ g) → H base-𝕊¹ ＝ base-homotopy-𝕊¹ (map-inv-equiv compute-homotopy-𝕊¹ H)
+  -- base-homotopy-𝕊¹-htpy H =
+  --   inv (htpy-eq (is-section-map-section-map-equiv compute-homotopy-𝕊¹ H) base-𝕊¹) ∙ {!inv-inv-equiv!}
   
 --   nat-htpy-homotopy-loop-𝕊¹ :
 --     (H : homotopy-𝕊¹) → nat-htpy (map-equiv compute-homotopy-𝕊¹ H) loop-𝕊¹ ＝ {!nat-homotopy-𝕊¹ H!}
