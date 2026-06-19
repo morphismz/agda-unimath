@@ -27,10 +27,11 @@ open import foundation.univalence
 open import foundation.homotopy-induction
 open import foundation.commuting-triangles-of-homotopies
 open import foundation.whiskering-homotopies-composition
+open import foundation.whiskering-homotopies-concatenation
 open import foundation.binary-homotopies
 open import foundation.homotopies
+open import foundation.commuting-squares-of-homotopies
 
-open import foundation-core.commuting-squares-of-homotopies
 open import foundation-core.contractible-maps
 open import foundation-core.contractible-types
 open import foundation-core.dependent-identifications
@@ -769,10 +770,10 @@ module _
   Eq-eq-fiber-algebra F .F refl = refl-Eq-fiber-algebra F
 
   abstract
-    is-torsorial-Eq-eq-fiber-algebra :
+    is-torsorial-Eq-fiber-algebra :
       {l3 : Level} {f : A → B} (F : fiber-algebra l3 f) →
       is-torsorial (Eq-fiber-algebra {l4 = l3} F)
-    is-torsorial-Eq-eq-fiber-algebra F =
+    is-torsorial-Eq-fiber-algebra F =
       is-torsorial-Eq-structure
         ( is-torsorial-equiv-fam (family-fiber-algebra F))
         ( family-fiber-algebra F , λ _ → id-equiv)
@@ -786,8 +787,14 @@ module _
     is-equiv-Eq-eq-fiber-algebra :
       {l3 : Level} {f : A → B} (F F' : fiber-algebra l3 f) →
       is-equiv (Eq-eq-fiber-algebra F F')
-    is-equiv-Eq-eq-fiber-algebra F = fundamental-theorem-id (is-torsorial-Eq-eq-fiber-algebra F) (Eq-eq-fiber-algebra F)  
+    is-equiv-Eq-eq-fiber-algebra F = fundamental-theorem-id (is-torsorial-Eq-fiber-algebra F) (Eq-eq-fiber-algebra F)  
 
+  equiv-Eq-eq-fiber-algebra :
+    {l3 : Level} {f : A → B} (F F' : fiber-algebra l3 f) →
+    (F ＝ F') ≃ Eq-fiber-algebra F F'
+  pr1 (equiv-Eq-eq-fiber-algebra F F') = Eq-eq-fiber-algebra F F'
+  pr2 (equiv-Eq-eq-fiber-algebra F F') = is-equiv-Eq-eq-fiber-algebra F F'
+  
   fiber-algebra-map :
     {l3 l4 : Level} {f : A → B} (F : fiber-algebra l3 f) (F' : fiber-algebra l4 f) → UU (l1 ⊔ l2 ⊔ l3 ⊔ l4)
   fiber-algebra-map F F' =
@@ -824,7 +831,7 @@ module _
         coherence-triangle-homotopies
           ( preserves-lift-fiber-algebra-map γ)
           ( preserves-lift-fiber-algebra-map γ')
-          ( (λ {a} → H (f a)) ·r (lift-fiber-algebra F))
+          ( ( λ {a} → H (f a)) ·r (lift-fiber-algebra F))
 
   refl-Eq-fiber-algebra-map :
     {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f}
@@ -841,13 +848,33 @@ module _
     is-torsorial-Eq-fiber-algebra-map :
       {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f}
       (γ : fiber-algebra-map F F') → is-torsorial (Eq-fiber-algebra-map γ)
-    is-torsorial-Eq-fiber-algebra-map γ =
+    is-torsorial-Eq-fiber-algebra-map {f = f} {F = F} {F' = F'} γ =
       is-torsorial-Eq-structure
         ( is-torsorial-binary-htpy (map-fiber-algebra-map γ))
         ( map-fiber-algebra-map γ , refl-binary-htpy (map-fiber-algebra-map γ))
-        {!is-torsorial-htpy!}
-    
+        ( is-torsorial-htpy
+          ( inv-htpy
+            ( ( λ {a} → refl-binary-htpy (map-fiber-algebra-map γ) (f a)) ·r
+            ( lift-fiber-algebra F)) ∙h
+            ( preserves-lift-fiber-algebra-map γ)))
 
+  abstract
+    is-equiv-Eq-eq-fiber-algebra-map :
+      {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f}
+      (γ γ' : fiber-algebra-map F F') → is-equiv (Eq-eq-fiber-algebra-map γ γ')
+    is-equiv-Eq-eq-fiber-algebra-map γ = fundamental-theorem-id (is-torsorial-Eq-fiber-algebra-map γ) (Eq-eq-fiber-algebra-map γ)  
+
+  equiv-Eq-eq-fiber-algebra-map : 
+    {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f}
+    (γ γ' : fiber-algebra-map F F') → (γ ＝ γ') ≃ Eq-fiber-algebra-map γ γ'
+  pr1 (equiv-Eq-eq-fiber-algebra-map γ γ') = Eq-eq-fiber-algebra-map γ γ'
+  pr2 (equiv-Eq-eq-fiber-algebra-map γ γ') = is-equiv-Eq-eq-fiber-algebra-map γ γ'
+
+  eq-Eq-fiber-algebra-map :
+    {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f}
+    (γ γ' : fiber-algebra-map F F') → Eq-fiber-algebra-map γ γ' → (γ ＝ γ')
+  eq-Eq-fiber-algebra-map γ γ' = map-inv-equiv (equiv-Eq-eq-fiber-algebra-map γ γ')
+  
   fiber-algebra-fiber :
     (f : A → B) → fiber-algebra (l1 ⊔ l2) f
   pr1 (fiber-algebra-fiber f) = fiber f
@@ -862,9 +889,28 @@ module _
       ( lift-fiber-algebra F)
   pr2 (fiber-algebra-map-fiber f F) a = refl
 
+  Eq-fiber-algebra-map-fiber :
+    {l3 : Level} {f : A → B} {F : fiber-algebra l3 f} →
+    (γ γ' : fiber-algebra-map (fiber-algebra-fiber f) F) →
+    Eq-fiber-algebra-map γ γ'
+  pr1 (Eq-fiber-algebra-map-fiber {f = f} γ γ') .(f a) (a , refl) =
+    preserves-lift-fiber-algebra-map γ a ∙ inv (preserves-lift-fiber-algebra-map γ' a)
+  pr2 (Eq-fiber-algebra-map-fiber {f = f} γ γ') =
+    inv-htpy right-unit-htpy ∙h
+    ( inv-htpy (left-whisker-concat-htpy (preserves-lift-fiber-algebra-map γ) (left-inv-htpy (preserves-lift-fiber-algebra-map γ')))) ∙h
+    ( inv-htpy
+      ( assoc-htpy
+        ( preserves-lift-fiber-algebra-map γ)
+        ( inv-htpy (preserves-lift-fiber-algebra-map γ'))
+        ( preserves-lift-fiber-algebra-map γ')))
+
   is-initial-fiber-algebra-fiber :
     {l3 : Level} (f : A → B) (F : fiber-algebra l3 f) →
     is-contr (fiber-algebra-map (fiber-algebra-fiber f) F)
   pr1 (is-initial-fiber-algebra-fiber f F) = fiber-algebra-map-fiber f F
-  pr2 (is-initial-fiber-algebra-fiber f F) (pr3 , pr4) = {!!}
+  pr2 (is-initial-fiber-algebra-fiber f F) γ' =
+    eq-Eq-fiber-algebra-map
+      ( fiber-algebra-map-fiber f F)
+      ( γ')
+      ( Eq-fiber-algebra-map-fiber (fiber-algebra-map-fiber f F) γ')
 ```

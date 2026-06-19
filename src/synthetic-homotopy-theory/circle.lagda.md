@@ -20,6 +20,8 @@ open import foundation.dependent-products-propositions
 open import foundation.equivalences
 open import foundation.function-types
 open import foundation.homotopies
+open import foundation.function-extensionality
+open import foundation.function-extensionality-axiom
 open import foundation.identity-types
 open import foundation.mere-equality
 open import foundation.negated-equality
@@ -31,12 +33,14 @@ open import foundation.sections
 open import foundation.transport-along-identifications
 open import foundation.universe-levels
 open import foundation.whiskering-identifications-concatenation
+open import foundation.equivalence-extensionality
 
 open import higher-group-theory.higher-groups
 
 open import structured-types.pointed-types
 
-open import foundation-core.functoriality-dependent-pair-types
+open import foundation.functoriality-dependent-pair-types
+
 open import synthetic-homotopy-theory.dependent-suspension-structures
 open import synthetic-homotopy-theory.free-loops
 open import synthetic-homotopy-theory.spheres
@@ -637,8 +641,24 @@ module _
   Eq-homotopy-𝕊¹ : (H H' : homotopy-𝕊¹) → UU l1
   Eq-homotopy-𝕊¹ H H' =
     Σ (base-homotopy-𝕊¹ H ＝ base-homotopy-𝕊¹ H')
-      λ p →
-        {!!}
+      ( λ p →
+        coherence-square-identifications
+          ( left-whisker-concat (ap f loop-𝕊¹) p)
+          ( nat-homotopy-𝕊¹ H)
+          ( nat-homotopy-𝕊¹ H')
+          ( right-whisker-concat p  (ap g loop-𝕊¹)))
+
+--   refl-Eq-homotopy-𝕊¹ : (H : homotopy-𝕊¹) → Eq-homotopy-𝕊¹ H H
+--   pr1 (refl-Eq-homotopy-𝕊¹ H) = refl
+--   pr2 (refl-Eq-homotopy-𝕊¹ H) = {!!}
+
+-- -- concat-top-identification-coherence-square-identifications
+-- --       ( left-whisker-concat (ap f loop-𝕊¹) refl)
+-- --       ( nat-homotopy-𝕊¹ H)
+-- --       ( nat-homotopy-𝕊¹ H)
+-- --       ( right-whisker-concat refl (ap g loop-𝕊¹))
+-- --       {!!}
+-- --       {!!}
   
   compute-homotopy-𝕊¹ : homotopy-𝕊¹ ≃ (f ~ g)
   compute-homotopy-𝕊¹ =
@@ -646,14 +666,36 @@ module _
     equiv-tot
       (λ p →
         compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p)
-        
+
+  inv-equiv-compute-homotopy-𝕊¹ :
+    inv-equiv compute-homotopy-𝕊¹ ＝
+    ( equiv-tot
+      (λ p →
+        inv-equiv (compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))) ∘e
+    ( equiv-dependent-universal-property-𝕊¹ (eq-value f g))
+  inv-equiv-compute-homotopy-𝕊¹ =
+    ( distributive-inv-comp-equiv
+      ( equiv-tot
+        (λ p →
+          compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))
+      ( inv-equiv (equiv-dependent-universal-property-𝕊¹ (eq-value f g)))) ∙
+    ap
+      (_∘e_
+        ( inv-equiv
+          ( equiv-tot
+            (λ p →
+              compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))))
+      ( inv-inv-equiv (equiv-dependent-universal-property-𝕊¹ (eq-value f g))) ∙
+    {!compute-inv-equiv-tot!}
+        --  nat-htpy-apd-htpy
   base-homotopy-𝕊¹-htpy :
     (H : f ~ g) → H base-𝕊¹ ＝ base-homotopy-𝕊¹ (map-inv-equiv compute-homotopy-𝕊¹ H)
-  base-homotopy-𝕊¹-htpy H = {!!}
+  base-homotopy-𝕊¹-htpy H =
+    inv (htpy-eq (is-section-map-section-map-equiv compute-homotopy-𝕊¹ H) base-𝕊¹) ∙ {!inv-inv-equiv!}
   
-  nat-htpy-homotopy-loop-𝕊¹ :
-    (H : homotopy-𝕊¹) → nat-htpy (map-equiv compute-homotopy-𝕊¹ H) loop-𝕊¹ ＝ {!nat-homotopy-𝕊¹ H!}
-  nat-htpy-homotopy-loop-𝕊¹ = {!!}
+--   nat-htpy-homotopy-loop-𝕊¹ :
+--     (H : homotopy-𝕊¹) → nat-htpy (map-equiv compute-homotopy-𝕊¹ H) loop-𝕊¹ ＝ {!nat-homotopy-𝕊¹ H!}
+--   nat-htpy-homotopy-loop-𝕊¹ = {!!}
 
 2-automorphisms-homotopy-𝕊¹ : homotopy-𝕊¹ id id
 pr1 2-automorphisms-homotopy-𝕊¹ = loop-𝕊¹
