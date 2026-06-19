@@ -9,15 +9,19 @@ module synthetic-homotopy-theory.triple-loop-spaces where
 ```agda
 open import foundation.action-on-identifications-binary-functions
 open import foundation.action-on-identifications-functions
+open import foundation.dependent-pair-types
 open import foundation.homotopies
 open import foundation.identity-types
 open import foundation.path-algebra
 open import foundation.universe-levels
 
+open import structured-types.pointed-equivalences
 open import structured-types.pointed-types
 
+open import synthetic-homotopy-theory.loop-spaces
 open import synthetic-homotopy-theory.double-loop-spaces
 open import synthetic-homotopy-theory.iterated-loop-spaces
+open import synthetic-homotopy-theory.functoriality-loop-spaces
 ```
 
 </details>
@@ -248,4 +252,18 @@ inner-eckmann-hilton-connection-y-z-concat-Ω³ β γ =
       ( left-unit-law-z-concat-Ω³ γ)
       ( right-unit-law-z-concat-Ω³ β)))
 -}
+```
+
+### The double loop space of a pointed type is equivalent to a double loop space
+
+```agda
+module _
+  {l : Level} (A : Pointed-Type l) {x : type-Pointed-Type A}
+  (p : point-Pointed-Type A ＝ x)
+  where
+
+  pointed-equiv-3-loop-pointed-identity :
+    Ω² (point-Pointed-Type A ＝ x , p) ≃∗ Ω³ A
+  pointed-equiv-3-loop-pointed-identity =
+    pointed-equiv-Ω-pointed-equiv (pointed-equiv-Ω-pointed-equiv (pointed-equiv-loop-pointed-identity A p))
 ```

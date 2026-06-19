@@ -21,6 +21,8 @@ open import foundation-core.function-types
 open import foundation-core.homotopies
 open import foundation-core.identity-types
 open import foundation-core.transport-along-identifications
+open import foundation-core.whiskering-identifications-concatenation
+open import foundation.path-algebra 
 ```
 
 </details>
@@ -96,6 +98,82 @@ module _
     map-compute-dependent-identification² α p' q'
   pr2 (compute-dependent-identification² α p' q') =
     is-equiv-map-compute-dependent-identification² α p' q'
+
+  map-compute-dependent-identification³ :
+    {x y : A} {p q : x ＝ y} {α β : p ＝ q} (γ : α ＝ β)
+    {x' : B x} {y' : B y}
+    {p' : dependent-identification B p x' y'}
+    {q' : dependent-identification B q x' y'}
+    (α' : dependent-identification² B α p' q')
+    (β' : dependent-identification² B β p' q') →
+    ((map-inv-compute-dependent-identification² α p' q' α' ∙ right-whisker-concat (tr³ B γ x') q') ＝ map-inv-compute-dependent-identification² β p' q' β') →
+    dependent-identification³ B γ α' β'
+  map-compute-dependent-identification³ {α = refl} refl {p' = p'} {q' = q'} α' β' γ' = inv right-unit ∙ γ'
+    -- map-inv-equiv-ap (inv-equiv (compute-dependent-identification² α p' q')) _ _ (inv right-unit ∙ γ')
+    -- if you don't want to case on α
+
+  map-inv-compute-dependent-identification³ :
+    {x y : A} {p q : x ＝ y} {α β : p ＝ q} (γ : α ＝ β)
+    {x' : B x} {y' : B y}
+    {p' : dependent-identification B p x' y'}
+    {q' : dependent-identification B q x' y'}
+    (α' : dependent-identification² B α p' q')
+    (β' : dependent-identification² B β p' q') →
+    dependent-identification³ B γ α' β' →
+    ((map-inv-compute-dependent-identification² α p' q' α' ∙ right-whisker-concat (tr³ B γ x') q') ＝ map-inv-compute-dependent-identification² β p' q' β')
+  map-inv-compute-dependent-identification³ {α = refl} refl α' β' γ' = right-unit ∙ γ'
+
+  is-section-map-inv-compute-dependent-identification³ :
+    {x y : A} {p q : x ＝ y} {α β : p ＝ q} (γ : α ＝ β)
+    {x' : B x} {y' : B y}
+    {p' : dependent-identification B p x' y'}
+    {q' : dependent-identification B q x' y'}
+    (α' : dependent-identification² B α p' q')
+    (β' : dependent-identification² B β p' q') →
+    ( map-compute-dependent-identification³ γ α' β' ∘
+      map-inv-compute-dependent-identification³ γ α' β') ~ id
+  is-section-map-inv-compute-dependent-identification³ {α = refl} refl α' β' γ' =
+    inv (assoc (inv right-unit) (right-unit) γ') ∙ right-whisker-concat (left-inv right-unit) γ'
+
+  is-retraction-map-inv-compute-dependent-identification³ :
+    {x y : A} {p q : x ＝ y} {α β : p ＝ q} (γ : α ＝ β)
+    {x' : B x} {y' : B y}
+    {p' : dependent-identification B p x' y'}
+    {q' : dependent-identification B q x' y'}
+    (α' : dependent-identification² B α p' q')
+    (β' : dependent-identification² B β p' q') →
+    ( map-inv-compute-dependent-identification³ γ α' β' ∘
+      map-compute-dependent-identification³ γ α' β') ~ id
+  is-retraction-map-inv-compute-dependent-identification³ {α = refl} refl α' β' γ' =
+    inv (assoc (right-unit) (inv right-unit) γ') ∙ right-whisker-concat (right-inv right-unit) γ'
+
+  is-equiv-map-compute-dependent-identification³ :
+    {x y : A} {p q : x ＝ y} {α β : p ＝ q} (γ : α ＝ β)
+    {x' : B x} {y' : B y}
+    {p' : dependent-identification B p x' y'}
+    {q' : dependent-identification B q x' y'}
+    (α' : dependent-identification² B α p' q')
+    (β' : dependent-identification² B β p' q') →
+    is-equiv (map-compute-dependent-identification³ γ α' β')
+  is-equiv-map-compute-dependent-identification³ γ α' β' =
+    is-equiv-is-invertible
+      (map-inv-compute-dependent-identification³ γ α' β')
+      ( is-section-map-inv-compute-dependent-identification³ γ α' β')
+      ( is-retraction-map-inv-compute-dependent-identification³ γ α' β')
+
+  compute-dependent-identification³ :
+    {x y : A} {p q : x ＝ y} {α β : p ＝ q} (γ : α ＝ β)
+    {x' : B x} {y' : B y}
+    {p' : dependent-identification B p x' y'}
+    {q' : dependent-identification B q x' y'}
+    (α' : dependent-identification² B α p' q')
+    (β' : dependent-identification² B β p' q') →
+    ((map-inv-compute-dependent-identification² α p' q' α' ∙ right-whisker-concat (tr³ B γ x') q') ＝ map-inv-compute-dependent-identification² β p' q' β') ≃
+    dependent-identification³ B γ α' β'    
+  pr1 (compute-dependent-identification³ α p' q') =
+    map-compute-dependent-identification³ α p' q'
+  pr2 (compute-dependent-identification³ α p' q') =
+    is-equiv-map-compute-dependent-identification³ α p' q'  
 ```
 
 ### The groupoidal structure of dependent identifications

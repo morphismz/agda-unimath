@@ -36,6 +36,7 @@ open import higher-group-theory.higher-groups
 
 open import structured-types.pointed-types
 
+open import foundation-core.functoriality-dependent-pair-types
 open import synthetic-homotopy-theory.dependent-suspension-structures
 open import synthetic-homotopy-theory.free-loops
 open import synthetic-homotopy-theory.spheres
@@ -85,6 +86,12 @@ dependent-universal-property-𝕊¹ :
   dependent-universal-property-circle free-loop-𝕊¹
 dependent-universal-property-𝕊¹ =
   dependent-universal-property-induction-principle-circle free-loop-𝕊¹ ind-𝕊¹
+
+equiv-dependent-universal-property-𝕊¹ :
+  {l : Level} (P : 𝕊¹ → UU l) → ((x : 𝕊¹) → P x) ≃ free-dependent-loop free-loop-𝕊¹ P
+pr1 (equiv-dependent-universal-property-𝕊¹ X) = ev-free-loop-Π free-loop-𝕊¹ X
+pr2 (equiv-dependent-universal-property-𝕊¹ X) = dependent-universal-property-𝕊¹ X
+
 
 uniqueness-dependent-universal-property-𝕊¹ :
   {l : Level} {P : 𝕊¹ → UU l} (k : free-dependent-loop free-loop-𝕊¹ P) →
@@ -138,6 +145,11 @@ universal-property-𝕊¹ =
   universal-property-dependent-universal-property-circle
     ( free-loop-𝕊¹)
     ( dependent-universal-property-𝕊¹)
+
+equiv-universal-property-𝕊¹ :
+  {l : Level} (X : UU l) → (𝕊¹ → X) ≃ free-loop X
+pr1 (equiv-universal-property-𝕊¹ X) = ev-free-loop free-loop-𝕊¹ X
+pr2 (equiv-universal-property-𝕊¹ X) = universal-property-𝕊¹ X
 
 uniqueness-universal-property-𝕊¹ :
   {l : Level} {X : UU l} (α : free-loop X) →
@@ -583,6 +595,85 @@ pr2 is-equiv-sphere-1-circle =
 equiv-sphere-1-circle : 𝕊¹ ≃ sphere 1
 pr1 equiv-sphere-1-circle = sphere-1-circle
 pr2 equiv-sphere-1-circle = is-equiv-sphere-1-circle
+```
+
+```agda
+
+module _
+  { l1 : Level} {P : 𝕊¹ → UU l1} (f g : (x : 𝕊¹) → P x)
+  where
+
+  -- homotopy-Π-𝕊¹ : UU l1
+  -- homotopy-Π-𝕊¹ =
+  --   Σ (f base-𝕊¹ ＝ g base-𝕊¹)
+  --     (λ p → {!!})
+
+module _
+  { l1 : Level} {X : UU l1} (f g : 𝕊¹ → X)
+  where
+  
+  homotopy-𝕊¹ : UU l1
+  homotopy-𝕊¹ =
+    Σ (f base-𝕊¹ ＝ g base-𝕊¹)
+      (λ p →
+        coherence-square-identifications
+          ( p)
+          ( ap f loop-𝕊¹)
+          ( ap g loop-𝕊¹)
+          ( p))
+
+  base-homotopy-𝕊¹ : homotopy-𝕊¹ → f base-𝕊¹ ＝ g base-𝕊¹
+  base-homotopy-𝕊¹ = pr1
+
+  nat-homotopy-𝕊¹ :
+    (H : homotopy-𝕊¹) →
+    coherence-square-identifications
+      ( base-homotopy-𝕊¹ H)
+      ( ap f loop-𝕊¹)
+      ( ap g loop-𝕊¹)
+      ( base-homotopy-𝕊¹ H)    
+  nat-homotopy-𝕊¹ = pr2
+  
+  Eq-homotopy-𝕊¹ : (H H' : homotopy-𝕊¹) → UU l1
+  Eq-homotopy-𝕊¹ H H' =
+    Σ (base-homotopy-𝕊¹ H ＝ base-homotopy-𝕊¹ H')
+      λ p →
+        {!!}
+  
+  compute-homotopy-𝕊¹ : homotopy-𝕊¹ ≃ (f ~ g)
+  compute-homotopy-𝕊¹ =
+    inv-equiv (equiv-dependent-universal-property-𝕊¹ (eq-value f g)) ∘e
+    equiv-tot
+      (λ p →
+        compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p)
+        
+  base-homotopy-𝕊¹-htpy :
+    (H : f ~ g) → H base-𝕊¹ ＝ base-homotopy-𝕊¹ (map-inv-equiv compute-homotopy-𝕊¹ H)
+  base-homotopy-𝕊¹-htpy H = {!!}
+  
+  nat-htpy-homotopy-loop-𝕊¹ :
+    (H : homotopy-𝕊¹) → nat-htpy (map-equiv compute-homotopy-𝕊¹ H) loop-𝕊¹ ＝ {!nat-homotopy-𝕊¹ H!}
+  nat-htpy-homotopy-loop-𝕊¹ = {!!}
+
+2-automorphisms-homotopy-𝕊¹ : homotopy-𝕊¹ id id
+pr1 2-automorphisms-homotopy-𝕊¹ = loop-𝕊¹
+pr2 2-automorphisms-homotopy-𝕊¹ =
+  concat-left-identification-coherence-square-identifications
+    loop-𝕊¹
+    loop-𝕊¹
+    (ap id loop-𝕊¹)
+    loop-𝕊¹
+    (inv (ap-id loop-𝕊¹))
+    (concat-right-identification-coherence-square-identifications
+      loop-𝕊¹
+      loop-𝕊¹
+      loop-𝕊¹
+      loop-𝕊¹
+      (inv (ap-id loop-𝕊¹))
+      refl)
+
+2-automorphisms-𝕊¹ : id {A = 𝕊¹} ~ id {A = 𝕊¹}
+2-automorphisms-𝕊¹ = map-equiv (compute-homotopy-𝕊¹ id id) 2-automorphisms-homotopy-𝕊¹
 ```
 
 ## See also

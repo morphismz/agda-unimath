@@ -1,4 +1,4 @@
-# The universal property of the family of fibers of maps
+ The universal property of the family of fibers of maps
 
 ```agda
 module foundation.universal-property-family-of-fibers-of-maps where
@@ -19,7 +19,18 @@ open import foundation.subtype-identity-principle
 open import foundation.type-theoretic-principle-of-choice
 open import foundation.universal-property-dependent-pair-types
 open import foundation.universe-levels
+open import foundation.families-of-equivalences
+open import foundation.torsorial-type-families
+open import foundation.fundamental-theorem-of-identity-types
+open import foundation.structure-identity-principle
+open import foundation.univalence
+open import foundation.homotopy-induction
+open import foundation.commuting-triangles-of-homotopies
+open import foundation.whiskering-homotopies-composition
+open import foundation.binary-homotopies
+open import foundation.homotopies
 
+open import foundation-core.commuting-squares-of-homotopies
 open import foundation-core.contractible-maps
 open import foundation-core.contractible-types
 open import foundation-core.dependent-identifications
@@ -29,7 +40,6 @@ open import foundation-core.fibers-of-maps
 open import foundation-core.function-types
 open import foundation-core.functoriality-dependent-function-types
 open import foundation-core.functoriality-dependent-pair-types
-open import foundation-core.homotopies
 open import foundation-core.identity-types
 open import foundation-core.retractions
 open import foundation-core.sections
@@ -349,6 +359,8 @@ module _
   inv-equiv-universal-property-family-of-fibers =
     inv-equiv-dependent-universal-property-family-of-fibers f (λ y _ → C y)
 ```
+
+
 
 ### If a type family equipped with a lift of a map satisfies the universal property of the family of fibers, then it satisfies a unique extension property
 
@@ -708,4 +720,151 @@ module _
   curried-dependent-product-characterization-fiber-precomp' =
     ( equiv-Π-equiv-family (λ b → equiv-tot (λ u → equiv-ev-pair))) ∘e
     ( dependent-product-characterization-fiber-precomp')
+```
+
+### The wild category of families equipped with lifts
+
+We provides another formulation of the universal property, more directly stating
+that the family of fibers is initial amoung families equipped with a lift.
+
+```agda
+module _
+  {l1 l2 : Level} {A : UU l1} {B : UU l2}
+  where
+
+  fiber-algebra : 
+    (l3 : Level) (f : A → B) → UU (l1 ⊔ l2 ⊔ lsuc l3)
+  fiber-algebra l3 f = Σ (B → UU l3) (λ P → lift-family-of-elements P f)
+
+  family-fiber-algebra :
+    {l3 : Level} {f : A → B} → fiber-algebra l3 f → B → UU l3
+  family-fiber-algebra = pr1
+
+  lift-fiber-algebra :
+    {l3 : Level} {f : A → B} → (F : fiber-algebra l3 f) → (lift-family-of-elements (family-fiber-algebra F) f)
+  lift-fiber-algebra = pr2
+
+  Eq-fiber-algebra :
+    {l3 l4 : Level} {f : A → B} (F : fiber-algebra l3 f) (F' : fiber-algebra l4 f) →
+    UU (l1 ⊔ l2 ⊔ l3 ⊔ l4)
+  Eq-fiber-algebra F F' =
+    Σ (fam-equiv (family-fiber-algebra F) (family-fiber-algebra F'))
+      ( λ e →
+        ev-double-lift-family-of-elements
+          { B = family-fiber-algebra F}
+          { λ b _ → family-fiber-algebra F' b}
+          ( lift-fiber-algebra F)
+          ( map-fam-equiv e) ~
+        lift-fiber-algebra F')
+
+  refl-Eq-fiber-algebra : 
+    {l3 : Level} {f : A → B} (F : fiber-algebra l3 f) →
+    Eq-fiber-algebra F F
+  pr1 (refl-Eq-fiber-algebra F) = λ _ → id-equiv
+  pr2 (refl-Eq-fiber-algebra F) = refl-htpy
+
+  Eq-eq-fiber-algebra : 
+    {l3 : Level} {f : A → B} (F F' : fiber-algebra l3 f) →
+    F ＝ F' → Eq-fiber-algebra F F'
+  Eq-eq-fiber-algebra F .F refl = refl-Eq-fiber-algebra F
+
+  abstract
+    is-torsorial-Eq-eq-fiber-algebra :
+      {l3 : Level} {f : A → B} (F : fiber-algebra l3 f) →
+      is-torsorial (Eq-fiber-algebra {l4 = l3} F)
+    is-torsorial-Eq-eq-fiber-algebra F =
+      is-torsorial-Eq-structure
+        ( is-torsorial-equiv-fam (family-fiber-algebra F))
+        ( family-fiber-algebra F , λ _ → id-equiv)
+        ( is-torsorial-htpy
+          (ev-double-lift-family-of-elements
+            { B = family-fiber-algebra F}
+            ( lift-fiber-algebra F)
+            ( λ x → id)))
+
+  abstract
+    is-equiv-Eq-eq-fiber-algebra :
+      {l3 : Level} {f : A → B} (F F' : fiber-algebra l3 f) →
+      is-equiv (Eq-eq-fiber-algebra F F')
+    is-equiv-Eq-eq-fiber-algebra F = fundamental-theorem-id (is-torsorial-Eq-eq-fiber-algebra F) (Eq-eq-fiber-algebra F)  
+
+  fiber-algebra-map :
+    {l3 l4 : Level} {f : A → B} (F : fiber-algebra l3 f) (F' : fiber-algebra l4 f) → UU (l1 ⊔ l2 ⊔ l3 ⊔ l4)
+  fiber-algebra-map F F' =
+    Σ ((b : B) → family-fiber-algebra F b → family-fiber-algebra F' b)
+      (λ γ →
+        ev-double-lift-family-of-elements
+          { B = family-fiber-algebra F}
+          { λ b _ → family-fiber-algebra F' b}
+          ( lift-fiber-algebra F)
+          ( γ) ~
+        lift-fiber-algebra F')
+
+  map-fiber-algebra-map :
+    {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f} →
+    fiber-algebra-map F F' → (b : B) → family-fiber-algebra F b → family-fiber-algebra F' b
+  map-fiber-algebra-map = pr1
+
+  preserves-lift-fiber-algebra-map :
+    {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f} → (γ : fiber-algebra-map F F') →
+    ev-double-lift-family-of-elements
+      { B = family-fiber-algebra F}
+      { λ b _ → family-fiber-algebra F' b}
+      ( lift-fiber-algebra F)
+      ( map-fiber-algebra-map γ) ~
+    lift-fiber-algebra F'    
+  preserves-lift-fiber-algebra-map = pr2
+
+  Eq-fiber-algebra-map :
+    {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f}
+    (γ γ' : fiber-algebra-map F F') → UU (l1 ⊔ l2 ⊔ l3 ⊔ l4)
+  Eq-fiber-algebra-map {f = f} {F = F} γ γ' =
+    Σ (binary-htpy (map-fiber-algebra-map γ) (map-fiber-algebra-map γ'))
+      λ H →
+        coherence-triangle-homotopies
+          ( preserves-lift-fiber-algebra-map γ)
+          ( preserves-lift-fiber-algebra-map γ')
+          ( (λ {a} → H (f a)) ·r (lift-fiber-algebra F))
+
+  refl-Eq-fiber-algebra-map :
+    {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f}
+    (γ : fiber-algebra-map F F') → Eq-fiber-algebra-map γ γ
+  pr1 (refl-Eq-fiber-algebra-map γ) = refl-binary-htpy (map-fiber-algebra-map γ)
+  pr2 (refl-Eq-fiber-algebra-map γ) = refl-htpy
+  
+  Eq-eq-fiber-algebra-map :
+    {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f}
+    (γ γ' : fiber-algebra-map F F') → γ ＝ γ' → Eq-fiber-algebra-map γ γ'
+  Eq-eq-fiber-algebra-map γ .γ refl = refl-Eq-fiber-algebra-map γ
+
+  abstract
+    is-torsorial-Eq-fiber-algebra-map :
+      {l3 l4 : Level} {f : A → B} {F : fiber-algebra l3 f} {F' : fiber-algebra l4 f}
+      (γ : fiber-algebra-map F F') → is-torsorial (Eq-fiber-algebra-map γ)
+    is-torsorial-Eq-fiber-algebra-map γ =
+      is-torsorial-Eq-structure
+        ( is-torsorial-binary-htpy (map-fiber-algebra-map γ))
+        ( map-fiber-algebra-map γ , refl-binary-htpy (map-fiber-algebra-map γ))
+        {!is-torsorial-htpy!}
+    
+
+  fiber-algebra-fiber :
+    (f : A → B) → fiber-algebra (l1 ⊔ l2) f
+  pr1 (fiber-algebra-fiber f) = fiber f
+  pr2 (fiber-algebra-fiber f) = lift-family-of-elements-fiber f
+
+  fiber-algebra-map-fiber :
+    {l3 : Level} (f : A → B) (F : fiber-algebra l3 f) →
+    fiber-algebra-map (fiber-algebra-fiber f) F
+  pr1 (fiber-algebra-map-fiber f F) =
+    map-equiv
+      ( inv-equiv-universal-property-family-of-fibers f (family-fiber-algebra F))
+      ( lift-fiber-algebra F)
+  pr2 (fiber-algebra-map-fiber f F) a = refl
+
+  is-initial-fiber-algebra-fiber :
+    {l3 : Level} (f : A → B) (F : fiber-algebra l3 f) →
+    is-contr (fiber-algebra-map (fiber-algebra-fiber f) F)
+  pr1 (is-initial-fiber-algebra-fiber f F) = fiber-algebra-map-fiber f F
+  pr2 (is-initial-fiber-algebra-fiber f F) (pr3 , pr4) = {!!}
 ```
