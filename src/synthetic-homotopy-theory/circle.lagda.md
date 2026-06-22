@@ -618,13 +618,7 @@ module _
   
   homotopy-𝕊¹ : UU l1
   homotopy-𝕊¹ =
-    Σ (f base-𝕊¹ ＝ g base-𝕊¹)
-      (λ p →
-        coherence-square-identifications
-          ( p)
-          ( ap f loop-𝕊¹)
-          ( ap g loop-𝕊¹)
-          ( p))
+    Eq-free-loop (ev-free-loop free-loop-𝕊¹ X f) (ev-free-loop free-loop-𝕊¹ X g)
 
   base-homotopy-𝕊¹ : homotopy-𝕊¹ → f base-𝕊¹ ＝ g base-𝕊¹
   base-homotopy-𝕊¹ = pr1
@@ -637,35 +631,32 @@ module _
       ( ap g loop-𝕊¹)
       ( base-homotopy-𝕊¹ H)    
   nat-homotopy-𝕊¹ = pr2
-  
-  Eq-homotopy-𝕊¹ : (H H' : homotopy-𝕊¹) → UU l1
-  Eq-homotopy-𝕊¹ H H' =
-    Σ (base-homotopy-𝕊¹ H ＝ base-homotopy-𝕊¹ H')
-      ( λ p →
-        coherence-square-identifications
-          ( left-whisker-concat (ap f loop-𝕊¹) p)
-          ( nat-homotopy-𝕊¹ H)
-          ( nat-homotopy-𝕊¹ H')
-          ( right-whisker-concat p  (ap g loop-𝕊¹)))
 
---   refl-Eq-homotopy-𝕊¹ : (H : homotopy-𝕊¹) → Eq-homotopy-𝕊¹ H H
---   pr1 (refl-Eq-homotopy-𝕊¹ H) = refl
---   pr2 (refl-Eq-homotopy-𝕊¹ H) = {!!}
+  inv-equiv-compute-homotopy-𝕊¹ : (f ~ g) ≃ homotopy-𝕊¹
+  inv-equiv-compute-homotopy-𝕊¹ =
+    equiv-tot
+      (λ p →
+        inv-equiv (compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p)) ∘e
+    (equiv-dependent-universal-property-𝕊¹ (eq-value f g))
 
--- -- concat-top-identification-coherence-square-identifications
--- --       ( left-whisker-concat (ap f loop-𝕊¹) refl)
--- --       ( nat-homotopy-𝕊¹ H)
--- --       ( nat-homotopy-𝕊¹ H)
--- --       ( right-whisker-concat refl (ap g loop-𝕊¹))
--- --       {!!}
--- --       {!!}
-  
   compute-homotopy-𝕊¹ : homotopy-𝕊¹ ≃ (f ~ g)
   compute-homotopy-𝕊¹ =
     inv-equiv (equiv-dependent-universal-property-𝕊¹ (eq-value f g)) ∘e
     equiv-tot
       (λ p →
         compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p)
+
+  test-boy :
+    inv-equiv compute-homotopy-𝕊¹ ＝
+    inv-equiv-compute-homotopy-𝕊¹
+  test-boy =
+    ( distributive-inv-comp-equiv
+      ( equiv-tot
+        ( λ p →
+          compute-dependent-identification-eq-value-function f g loop-𝕊¹ p p))
+      ( inv-equiv (equiv-dependent-universal-property-𝕊¹ (eq-value f g)))) ∙
+    {!compute-inv-equiv-tot!}
+  
 
   -- inv-equiv-compute-homotopy-𝕊¹ :
   --   inv-equiv compute-homotopy-𝕊¹ ＝
