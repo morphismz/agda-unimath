@@ -21,6 +21,7 @@ open import foundation-core.contractible-maps
 open import foundation-core.dependent-identifications
 open import foundation-core.equality-dependent-pair-types
 open import foundation-core.equivalences
+open import foundation.equivalence-extensionality
 open import foundation-core.fibers-of-maps
 open import foundation-core.function-types
 open import foundation-core.homotopies
@@ -385,15 +386,23 @@ module _
   {l1 l2 l3 : Level} {A : UU l1} {B : A → UU l2} {C : A → UU l3}
   where
 
-  compute-inv-equiv-tot :
+  compute-inv-equiv-tot-equiv-htpy :
     (e : (x : A) → B x ≃ C x) →
-    map-inv-equiv (equiv-tot e) ~
-    map-equiv (equiv-tot (λ x → inv-equiv (e x)))
-  compute-inv-equiv-tot e (a , c) =
+    htpy-equiv
+      (inv-equiv (equiv-tot e))
+      (equiv-tot (λ x → inv-equiv (e x)))
+  compute-inv-equiv-tot-equiv-htpy e (a , c) =
     is-injective-equiv
       ( equiv-tot e)
       ( ( is-section-map-inv-equiv (equiv-tot e) (a , c)) ∙
         ( eq-pair-eq-fiber (inv (is-section-map-inv-equiv (e a) c))))
+
+  compute-inv-equiv-tot :
+    (e : (x : A) → B x ≃ C x) →
+    inv-equiv (equiv-tot e) ＝
+    (equiv-tot (λ x → inv-equiv (e x)))
+  compute-inv-equiv-tot e = eq-htpy-equiv (compute-inv-equiv-tot-equiv-htpy e)
+  
 ```
 
 ### If every fiber has an element then the base is a retract of the dependent sum

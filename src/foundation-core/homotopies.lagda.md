@@ -312,6 +312,11 @@ nat-htpy-id~id :
   {l : Level} {A : UU l} (H : id ~ id)
   {x y : A} (p : x ＝ y) → H x ∙ p ＝ p ∙ H y
 nat-htpy-id~id H refl = right-unit
+
+inv-nat-htpy-id~id :
+  {l : Level} {A : UU l} (H : id ~ id)
+  {x y : A} (p : x ＝ y) → p ∙ H y ＝ H x ∙ p
+inv-nat-htpy-id~id H refl = inv right-unit
 ```
 
 ### Conjugation by homotopies
